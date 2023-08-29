@@ -165,7 +165,7 @@ class UserControllerTest {
     @Test
     void shouldFindAllUsers() {
         //given
-        final Map<String, User> result = new HashMap<>();
+        final Map<Integer, User> result = new HashMap<>();
         User user1 = new User("dolore",
                 "mail@mail.ru", LocalDate.of(1946, 8, 20));
         user1.setName("Nick Name");
@@ -179,8 +179,8 @@ class UserControllerTest {
         UserController.createUser(user2);
         user1.setId(1);
         user2.setId(2);
-        result.put(user1.getEmail(), user1);
-        result.put(user2.getEmail(), user2);
+        result.put(user1.getId(), user1);
+        result.put(user2.getId(), user2);
         assertNotNull(UserController.findAllUsers(), "Список пользователей равен null");
         assertIterableEquals(UserController.findAllUsers(), result.values(),
                 "Списки пользователей не совпадают");
