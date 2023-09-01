@@ -34,7 +34,6 @@ public class UserController {
                     user.getEmail() + " уже зарегистрирован в системе. " +
                     "Его нельзя создать. Можно только обновить данные (метод PUT).");
         }
-
         if (containsSpace(user.getLogin())) {
             log.error("Логин не может содержать пробелы.");
             throw new ValidationException("Логин не может содержать пробелы.");
