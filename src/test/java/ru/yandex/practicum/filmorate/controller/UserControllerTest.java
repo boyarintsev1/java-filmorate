@@ -18,13 +18,14 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserControllerTest {
+    private UserController userController = new UserController();
     private Validator validator;          //создаем валидатор параметров User
 
     @BeforeEach
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        UserController.users.clear();
+        userController.users.clear();
     }
 
     @Test
@@ -37,7 +38,7 @@ class UserControllerTest {
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
         // when
-        User result = UserController.createUser(user);
+        User result = userController.createUser(user);
         // then
         assertAll("Check all fields",
                 () -> assertEquals(user.getName(), result.getName(), "Имена не совпадают"),
@@ -58,7 +59,7 @@ class UserControllerTest {
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта user");
         // when
         if (violations.isEmpty()) {
-            User result = UserController.createUser(user);
+            User result = userController.createUser(user);
             // then
             assertAll("Check all fields",
                     () -> assertEquals(user.getName(), result.getName(), "Имена не совпадают"),
@@ -85,7 +86,7 @@ class UserControllerTest {
                     new Executable() {
                         @Override
                         public void execute() {
-                            UserController.createUser(user);
+                            userController.createUser(user);
                         }
                     });
             // then
@@ -104,7 +105,7 @@ class UserControllerTest {
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
         // when
         if (violations.isEmpty()) {
-            User result = UserController.createUser(user);
+            User result = userController.createUser(user);
             // then
             assertAll("Check all fields",
                     () -> assertEquals(user.getName(), result.getName(), "Имена не совпадают"),
@@ -126,7 +127,7 @@ class UserControllerTest {
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта user");
         // when
         if (violations.isEmpty()) {
-            User result = UserController.createUser(user);
+            User result = userController.createUser(user);
             // then
             assertAll("Check all fields",
                     () -> assertEquals(user.getName(), result.getName(), "Имена не совпадают"),
@@ -149,8 +150,9 @@ class UserControllerTest {
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
         // when
         if (violations.isEmpty()) {
+            userController.createUser(user);
             user.setId(1);
-            User result = UserController.updateUser(user);
+            User result = userController.updateUser(user);
             // then
             assertAll("Check all fields",
                     () -> assertEquals(user.getName(), result.getName(), "Имена не совпадают"),
@@ -165,7 +167,7 @@ class UserControllerTest {
     @Test
     void shouldFindAllUsers() {
         //given
-        final Map<String, User> result = new HashMap<>();
+        final Map<Integer, User> result = new HashMap<>();
         User user1 = new User("dolore",
                 "mail@mail.ru", LocalDate.of(1946, 8, 20));
         user1.setName("Nick Name");
@@ -175,27 +177,29 @@ class UserControllerTest {
                 LocalDate.of(2012, 4, 3));
         user2.setName("Billy");
         //when
-        UserController.createUser(user1);
-        UserController.createUser(user2);
+        userController.createUser(user1);
+        userController.createUser(user2);
         user1.setId(1);
         user2.setId(2);
-        result.put(user1.getEmail(), user1);
-        result.put(user2.getEmail(), user2);
-        assertNotNull(UserController.findAllUsers(), "Список пользователей равен null");
-        assertIterableEquals(UserController.findAllUsers(), result.values(),
+        result.put(user1.getId(), user1);
+        result.put(user2.getId(), user2);
+        System.out.println("1=" + userController.findAllUsers());
+        System.out.println("2=" + result.values());
+        assertNotNull(userController.findAllUsers(), "Список пользователей равен null");
+        assertIterableEquals(userController.findAllUsers(), result.values(),
                 "Списки пользователей не совпадают");
     }
 
     @Test
     void shouldReturnFalseIfNotContainsSpace() {
         String input = "Электростанция";
-        assertFalse(UserController.containsSpace(input), "В выражении есть пробелы");
+        assertFalse(userController.containsSpace(input), "В выражении есть пробелы");
     }
 
     @Test
     void shouldReturnTrueIfContainsSpace() {
         String input = "Электро станция";
-        assertTrue(UserController.containsSpace(input), "В выражении есть пробелы");
+        assertTrue(userController.containsSpace(input), "В выражении есть пробелы");
     }
 }
 

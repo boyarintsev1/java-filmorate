@@ -18,13 +18,15 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FilmControllerTest {
+
+    private FilmController filmController = new FilmController();
     private Validator validator;          //создаем валидатор параметров Film
 
     @BeforeEach
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        FilmController.films.clear();
+        filmController.films.clear();
     }
 
     @Test
@@ -38,7 +40,7 @@ public class FilmControllerTest {
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта film");
         // when
-        Film result = FilmController.createFilm(film);
+        Film result = filmController.createFilm(film);
         // then
         assertAll("Check all player's fields",
                 () -> assertEquals(film.getName(), result.getName(), "Названия не совпадают"),
@@ -60,7 +62,7 @@ public class FilmControllerTest {
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта film");
         // when
         if (violations.isEmpty()) {
-            Film result = FilmController.createFilm(film);
+            Film result = filmController.createFilm(film);
             // then
             assertAll("Check all player's fields",
                     () -> assertEquals(film.getName(), result.getName(), "Названия не совпадают"),
@@ -86,7 +88,7 @@ public class FilmControllerTest {
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта film");
         // when
         if (violations.isEmpty()) {
-            Film result = FilmController.createFilm(film);
+            Film result = filmController.createFilm(film);
             // then
             assertAll("Check all player's fields",
                     () -> assertEquals(film.getName(), result.getName(), "Названия не совпадают"),
@@ -114,7 +116,7 @@ public class FilmControllerTest {
                     new Executable() {
                         @Override
                         public void execute() {
-                            Film result = FilmController.createFilm(film);
+                            filmController.createFilm(film);
                         }
                     });
             // then
@@ -134,7 +136,7 @@ public class FilmControllerTest {
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта film");
         // when
         if (violations.isEmpty()) {
-            Film result = FilmController.createFilm(film);
+            Film result = filmController.createFilm(film);
             // then
             assertAll("Check all player's fields",
                     () -> assertEquals(film.getName(), result.getName(), "Названия не совпадают"),
@@ -158,7 +160,9 @@ public class FilmControllerTest {
         // when
         if (violations.isEmpty()) {
             film.setId(1);
-            Film result = FilmController.updateFilm(film);
+            filmController.createFilm(film);
+            film.setId(1);
+            Film result = filmController.updateFilm(film);
             // then
             assertAll("Check all player's fields",
                     () -> assertEquals(film.getId(), result.getId(), "ID не совпадают"),
@@ -183,14 +187,14 @@ public class FilmControllerTest {
                 LocalDate.of(2004, 3, 9),
                 169);
         //when
-        FilmController.createFilm(film1);
-        FilmController.createFilm(film2);
+        filmController.createFilm(film1);
+        filmController.createFilm(film2);
         film1.setId(1);
         film2.setId(2);
         result.put(film1.getId(), film1);
         result.put(film2.getId(), film2);
-        assertNotNull(FilmController.findAllFilms(), "Список пользователей равен null");
-        assertIterableEquals(FilmController.findAllFilms(), result.values(),
+        assertNotNull(filmController.findAllFilms(), "Список пользователей равен null");
+        assertIterableEquals(filmController.findAllFilms(), result.values(),
                 "Списки пользователей не совпадают");
     }
 }
