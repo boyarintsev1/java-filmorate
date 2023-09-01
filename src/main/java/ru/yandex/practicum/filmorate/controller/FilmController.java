@@ -63,6 +63,7 @@ public class FilmController {
             log.info("Будет обновлен объект: {}", film);
             films.put(film.getId(), film);
         }
+        
         if (film.getDescription().length() > 200) {
             log.error("Описание фильма не может быть длиннее 200 символов.");
             throw new ValidationException("Описание фильма не может быть длиннее 200 символов.");
