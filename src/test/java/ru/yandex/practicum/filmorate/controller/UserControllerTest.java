@@ -335,7 +335,7 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldFindUserFriends () {
+    void shouldFindUserFriends() {
         //given
         User user1 = new User("dolore",
                 "mail@mail.ru", LocalDate.of(1946, 8, 20));
@@ -367,7 +367,7 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldNotFindUserFriendsIfIdNotCorrect () {
+    void shouldNotFindUserFriendsIfIdNotCorrect() {
         //given
         User user1 = new User("dolore",
                 "mail@mail.ru", LocalDate.of(1946, 8, 20));
@@ -400,7 +400,7 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldFindCommonFriends () {
+    void shouldFindCommonFriends() {
         //given
         User user1 = new User("dolore",
                 "mail@mail.ru", LocalDate.of(1946, 8, 20));
@@ -432,7 +432,7 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldNotFindCommonFriendsIfIdNotCorrect () {
+    void shouldNotFindCommonFriendsIfIdNotCorrect() {
         //given
         User user1 = new User("dolore",
                 "mail@mail.ru", LocalDate.of(1946, 8, 20));
