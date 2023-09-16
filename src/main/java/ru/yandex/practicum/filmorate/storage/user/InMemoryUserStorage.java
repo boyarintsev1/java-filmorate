@@ -54,7 +54,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-        public User updateUser(@Valid @RequestBody User user) {                //обновление данных пользователя
+    public User updateUser(@Valid @RequestBody User user) {                //обновление данных пользователя
         if (!users.containsKey(user.getId())) {
             throw new IncorrectIdException("userNotExists");
         } else {

@@ -53,18 +53,18 @@ public class FilmService {
     }
 
     public List<Film> findPopularFilms(int count) {              // метод получения фильмов по количеству лайков
-        if (count<1) {
+        if (count < 1) {
             throw new ArgNotPositiveException("count");
         }
         Comparator<Film> likesQuantity  = Comparator.comparingInt((Film film) -> film.getLikes().size());
         List<Film> popularFilmsList = new ArrayList<>(inMemoryFilmStorage.getFilms().values());
         popularFilmsList.sort(likesQuantity.reversed());
 
-        if (count> popularFilmsList.size()) {
+        if (count > popularFilmsList.size()) {
             count = popularFilmsList.size();
         }
 
-        log.info("Выводится список " + count +" популярных фильмов: {}", popularFilmsList);
+        log.info("Выводится список " + count + " популярных фильмов: {}", popularFilmsList);
         return popularFilmsList.subList(0, count);
     }
 
