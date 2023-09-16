@@ -1,14 +1,15 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
 @RestController
 @ResponseBody
@@ -16,70 +17,55 @@ import java.util.Map;
 @RequestMapping("/users")
 
 public class UserController {
-    final Map<Integer, User> users = new HashMap<>();
-    int id = 0;
+
+    private final UserService userService;
+
+    private final UserStorage inMemoryUserStorage;
+
+    @Autowired
+    public UserController(UserStorage inMemoryUserStorage, UserService userService) {
+        this.inMemoryUserStorage = inMemoryUserStorage;
+        this.userService = userService;
+    }
 
     @GetMapping
     public Collection<User> findAllUsers() {              // получение всех пользователей
-        return users.values();
+        return inMemoryUserStorage.findAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User findUserById (@PathVariable("id") String id) {              // получение пользователя по Id
+        return inMemoryUserStorage.findUserById(Integer.parseInt(id));
     }
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {            //создание нового пользователя
-        if (users.containsValue(user)) {
-            log.error("Пользователь с электронной почтой " +
-                    user.getEmail() + " уже зарегистрирован в системе. " +
-                    "Его нельзя создать. Можно только обновить данные (метод PUT).");
-            throw new ValidationException("Пользователь с электронной почтой " +
-                    user.getEmail() + " уже зарегистрирован в системе. " +
-                    "Его нельзя создать. Можно только обновить данные (метод PUT).");
-        }
-        if (containsSpace(user.getLogin())) {
-            log.error("Логин не может содержать пробелы.");
-            throw new ValidationException("Логин не может содержать пробелы.");
-        }
-        if (user.getName() == null || user.getName().isEmpty() || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-        id = id + 1;
-        user.setId(id);
-        log.info("Будет сохранен объект: {}", user);
-        users.put(user.getId(), user);
-        return user;
+        return inMemoryUserStorage.createUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {                //обновление данных пользователя
-        if (!users.containsKey(user.getId())) {
-            log.error("Пользователь с ID <" + user.getId() + "> с электронной почтой " +
-                    user.getEmail() + " ещё не зарегистрирован в системе. " +
-                    "Сначала необходимо его создать (метод POST).");
-            throw new ValidationException("Пользователь с ID <" + user.getId() + "> с электронной почтой "  +
-                    user.getEmail() + " ещё не зарегистрирован в системе. " +
-                    "Сначала необходимо его создать (метод POST).");
-        } else {
-                log.info("Будет обновлен объект: {}", user);
-                users.put(user.getId(), user);
-            }
-        if (containsSpace(user.getLogin())) {
-            log.error("Логин не может содержать пробелы.");
-            throw new ValidationException("Логин не может содержать пробелы.");
-        }
-        if (user.getName() == null || user.getName().isEmpty() || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-        return user;
+        return inMemoryUserStorage.updateUser(user);
     }
 
-    public boolean containsSpace(String input) {    //метод определения наличия пробелов в поле класса
-        if (!input.isEmpty()) {
-            for (int i = 0; i < input.length(); i++) {
-                if (Character.isWhitespace(input.charAt(i)) || Character.isSpaceChar(input.charAt(i))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    @PutMapping("/{id}/friends/{friendId}")             //добавление нового друга пользователя
+    public User addNewFriend (@PathVariable("id") String id, @PathVariable("friendId") String friendId) {
+        return userService.addNewFriend(Integer.parseInt(id), Integer.parseInt(friendId));
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")          //удаление друга пользователя
+    public User deleteFriend (@PathVariable("id") String id, @PathVariable("friendId") String friendId) {
+        return userService.deleteFriend(Integer.parseInt(id), Integer.parseInt(friendId));
+    }
+
+    @GetMapping("/{id}/friends")                        //получение списка друзей пользователя
+    public Set<User> findUserFriends(@PathVariable("id") String id) {
+            return userService.findUserFriends(Integer.parseInt(id));
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")           //получение списка общих друзей двух пользователей
+    public Set<User> findCommonFriends(@PathVariable("id") String id, @PathVariable("otherId") String otherId) {
+        return userService.findCommonFriends(Integer.parseInt(id), Integer.parseInt(otherId));
     }
 }
 
