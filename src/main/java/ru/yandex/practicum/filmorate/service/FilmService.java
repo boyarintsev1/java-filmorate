@@ -23,12 +23,12 @@ public class FilmService {
     private final InMemoryUserStorage inMemoryUserStorage;
 
     @Autowired
-    public FilmService (FilmStorage inMemoryFilmStorage, UserStorage inMemoryUserStorage) {
+    public FilmService(FilmStorage inMemoryFilmStorage, UserStorage inMemoryUserStorage) {
         this.inMemoryFilmStorage = (InMemoryFilmStorage) inMemoryFilmStorage;
         this.inMemoryUserStorage = (InMemoryUserStorage) inMemoryUserStorage;
     }
 
-    public Film addNewLike (int id, int userId) {                        // метод добавления лайка фильму
+    public Film addNewLike(int id, int userId) {                        // метод добавления лайка фильму
         if (!inMemoryFilmStorage.getFilms().containsKey(id)) {
             throw new IncorrectIdException("FilmID");
         }
@@ -40,7 +40,7 @@ public class FilmService {
         return inMemoryFilmStorage.getFilms().get(id);
     }
 
-    public Film deleteLike (int id, int userId) {                       // метод удаления лайка у фильма
+    public Film deleteLike(int id, int userId) {                       // метод удаления лайка у фильма
         if (!inMemoryFilmStorage.getFilms().containsKey(id)) {
             throw new IncorrectIdException("FilmID");
         }
@@ -52,7 +52,7 @@ public class FilmService {
         return inMemoryFilmStorage.getFilms().get(id);
     }
 
-    public List<Film> findPopularFilms (int count) {              // метод получения фильмов по количеству лайков
+    public List<Film> findPopularFilms(int count) {              // метод получения фильмов по количеству лайков
         if (count<1) {
             throw new ArgNotPositiveException("count");
         }

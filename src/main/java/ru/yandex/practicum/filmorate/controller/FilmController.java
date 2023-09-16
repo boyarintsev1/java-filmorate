@@ -31,7 +31,7 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public Film findFilmById (@PathVariable("id") String id) {              // получение фильма по Id
+    public Film findFilmById(@PathVariable("id") String id) {              // получение фильма по Id
         return inMemoryFilmStorage.findFilmById(Integer.parseInt(id));
     }
 
@@ -46,18 +46,18 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")                            //добавление лайка к фильму
-    public Film addNewLike (@PathVariable("id") String id, @PathVariable("userId") String userId) {
+    public Film addNewLike(@PathVariable("id") String id, @PathVariable("userId") String userId) {
         return filmService.addNewLike(Integer.parseInt(id), Integer.parseInt(userId));
     }
 
     @DeleteMapping("/{id}/like/{userId}")                          //удаление лайка
-    public Film deleteLike (@PathVariable("id") String id, @PathVariable("userId") String userId) {
+    public Film deleteLike(@PathVariable("id") String id, @PathVariable("userId") String userId) {
         return filmService.deleteLike(Integer.parseInt(id), Integer.parseInt(userId));
     }
 
     @GetMapping("/popular")                                // получение самых популярных фильмов
     @ResponseBody
-    public List<Film> findPopularFilms (@RequestParam(defaultValue = "10", required = false) String count) {
+    public List<Film> findPopularFilms(@RequestParam(defaultValue = "10", required = false) String count) {
         return filmService.findPopularFilms(Integer.parseInt(count));
     }
 }

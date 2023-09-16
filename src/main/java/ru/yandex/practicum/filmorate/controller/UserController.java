@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User findUserById (@PathVariable("id") String id) {              // получение пользователя по Id
+    public User findUserById(@PathVariable("id") String id) {              // получение пользователя по Id
         return inMemoryUserStorage.findUserById(Integer.parseInt(id));
     }
 
@@ -49,12 +49,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")             //добавление нового друга пользователя
-    public User addNewFriend (@PathVariable("id") String id, @PathVariable("friendId") String friendId) {
+    public User addNewFriend(@PathVariable("id") String id, @PathVariable("friendId") String friendId) {
         return userService.addNewFriend(Integer.parseInt(id), Integer.parseInt(friendId));
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")          //удаление друга пользователя
-    public User deleteFriend (@PathVariable("id") String id, @PathVariable("friendId") String friendId) {
+    public User deleteFriend(@PathVariable("id") String id, @PathVariable("friendId") String friendId) {
         return userService.deleteFriend(Integer.parseInt(id), Integer.parseInt(friendId));
     }
 
