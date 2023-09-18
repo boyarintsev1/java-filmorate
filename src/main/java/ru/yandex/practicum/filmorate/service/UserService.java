@@ -23,6 +23,7 @@ public class UserService {
     public Map<Integer, User> getUsers() {
         return inMemoryUserStorage.getUsers();
     }
+
     public Collection<User> findAllUsers() {              // получение всех пользователей
         return inMemoryUserStorage.findAllUsers();
     }
