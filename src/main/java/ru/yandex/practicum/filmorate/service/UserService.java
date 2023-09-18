@@ -8,9 +8,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -20,6 +18,25 @@ public class UserService {
     @Autowired
     public UserService(UserStorage inMemoryUserStorage) {
         this.inMemoryUserStorage = (InMemoryUserStorage) inMemoryUserStorage;
+    }
+
+    public Map<Integer, User> getUsers() {
+        return inMemoryUserStorage.getUsers();
+    }
+    public Collection<User> findAllUsers() {              // получение всех пользователей
+        return inMemoryUserStorage.findAllUsers();
+    }
+
+    public User findUserById(int id) {                  // получение пользователя по Id
+        return inMemoryUserStorage.findUserById(id);
+    }
+
+    public User createUser(User user) {                 //создание нового пользователя
+        return inMemoryUserStorage.createUser(user);
+    }
+
+    public User updateUser(User user) {                //обновление данных пользователя
+        return inMemoryUserStorage.updateUser(user);
     }
 
     public User addNewFriend(int id, int friendId) {                         //метод добавления нового друга

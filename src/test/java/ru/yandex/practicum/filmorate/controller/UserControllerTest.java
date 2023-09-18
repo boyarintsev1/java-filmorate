@@ -20,14 +20,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserControllerTest {
     private final InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
     private final UserService userService = new UserService(inMemoryUserStorage);
-    private final UserController userController = new UserController(inMemoryUserStorage, userService);
+    private final UserController userController = new UserController(userService);
     private Validator validator;          //создаем валидатор параметров User
 
     @BeforeEach
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        inMemoryUserStorage.getUsers().clear();
+        userService.getUsers().clear();
     }
 
     @Test

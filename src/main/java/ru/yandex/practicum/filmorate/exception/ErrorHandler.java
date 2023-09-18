@@ -21,9 +21,9 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleIncorrectIdException(final IncorrectIdException e) {
         if (e.getParameter().equals("userNotExists")) {
-            log.error("Пользователь с данной с электронной почтой ещё не зарегистрирован в системе. " +
+            log.error("Пользователь с указанным ID ещё не зарегистрирован в системе. " +
                     "Сначала необходимо его создать (метод POST).");
-            return new ErrorResponse("Пользователь с данной с электронной почтой ещё не зарегистрирован в системе. " +
+            return new ErrorResponse("Пользователь с указанным ID ещё не зарегистрирован в системе. " +
                     "Сначала необходимо его создать (метод POST).");
         }
         if (e.getParameter().equals("filmNotExists")) {
@@ -41,16 +41,16 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleIdExistsException(final IdExistsException e) {
         if (e.getParameter().equals("userIdExists")) {
-            log.error("Пользователь с данной электронной почтой уже зарегистрирован в системе. " +
+            log.error("Пользователь уже зарегистрирован в системе. " +
                     "Его нельзя создать. Можно только обновить данные (метод PUT).");
             return new ErrorResponse(
-                    "Пользователь с данной электронной почтой уже зарегистрирован в системе. " +
+                    "Пользователь уже зарегистрирован в системе. " +
                             "Его нельзя создать. Можно только обновить данные (метод PUT).");
         }
         if (e.getParameter().equals("filmIdExists")) {
-            log.error("Фильм с указанным ID уже зарегистрирован в системе. Его нельзя создать. " +
+            log.error("Фильм уже зарегистрирован в системе. Его нельзя создать. " +
                     "Можно только обновить данные (метод PUT).");
-            return new ErrorResponse("Фильм с указанным ID уже зарегистрирован в системе. Его нельзя создать. " +
+            return new ErrorResponse("Фильм уже зарегистрирован в системе. Его нельзя создать. " +
                     "Можно только обновить данные (метод PUT).");
         }
         log.error("Неверно указан " + e.getParameter());

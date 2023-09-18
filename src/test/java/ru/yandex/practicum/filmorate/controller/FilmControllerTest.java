@@ -22,20 +22,19 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FilmControllerTest {
-
     private final InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage();
     private final InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
     private final FilmService filmService = new FilmService(inMemoryFilmStorage, inMemoryUserStorage);
-    private final FilmController filmController = new FilmController(inMemoryFilmStorage, filmService);
+    private final FilmController filmController = new FilmController(filmService);
     private final UserService userService = new UserService(inMemoryUserStorage);
-    private final UserController userController = new UserController(inMemoryUserStorage, userService);
+    private final UserController userController = new UserController(userService);
     private Validator validator;          //создаем валидатор параметров Film
 
     @BeforeEach
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        inMemoryFilmStorage.getFilms().clear();
+        filmService.getFilms().clear();
     }
 
     @Test

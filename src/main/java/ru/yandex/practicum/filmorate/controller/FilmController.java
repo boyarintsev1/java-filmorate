@@ -5,58 +5,78 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
+
+/**
+ * класс - контроллер для управления данными о Film
+ */
 
 @RestController
 @ResponseBody
 @Slf4j
 @RequestMapping("/films")
 public class FilmController {
-    private final FilmStorage inMemoryFilmStorage;
     private final FilmService filmService;
-
     @Autowired
-    public FilmController(FilmStorage inMemoryFilmStorage, FilmService filmService) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
 
-    @GetMapping                                                    // получение всех фильмов
+    /**
+     * метод получения данных о всех фильмах
+     */
+    @GetMapping
     public Collection<Film> findAllFilms() {
-        return inMemoryFilmStorage.findAllFilms();
+        return filmService.findAllFilms();
     }
 
+    /**
+     * метод получения данных о фильме по его ID
+     */
     @GetMapping("/{id}")
-    public Film findFilmById(@PathVariable("id") String id) {              // получение фильма по Id
-        return inMemoryFilmStorage.findFilmById(Integer.parseInt(id));
+    public Film findFilmById(@PathVariable("id") String id) {
+        return filmService.findFilmById(Integer.parseInt(id));
     }
 
+    /**
+     * метод создания нового фильма
+     */
     @PostMapping
-    public Film createFilm(@Valid @RequestBody Film film) {        //создание нового фильма
-        return inMemoryFilmStorage.createFilm(film);
+    public Film createFilm(@Valid @RequestBody Film film) {
+        return filmService.createFilm(film);
     }
 
+    /**
+     * метод обновления данных о фильме
+     */
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) {        //обновление данных о фильме
-        return inMemoryFilmStorage.updateFilm(film);
+    public Film updateFilm(@Valid @RequestBody Film film) {
+        return filmService.updateFilm(film);
     }
 
-    @PutMapping("/{id}/like/{userId}")                            //добавление лайка к фильму
+    /**
+     * метод добавления лайка пользователя к фильму
+     */
+    @PutMapping("/{id}/like/{userId}")
     public Film addNewLike(@PathVariable("id") String id, @PathVariable("userId") String userId) {
         return filmService.addNewLike(Integer.parseInt(id), Integer.parseInt(userId));
     }
 
-    @DeleteMapping("/{id}/like/{userId}")                          //удаление лайка
+    /**
+     * метод удаления лайка пользователя из фильма
+     */
+    @DeleteMapping("/{id}/like/{userId}")
     public Film deleteLike(@PathVariable("id") String id, @PathVariable("userId") String userId) {
         return filmService.deleteLike(Integer.parseInt(id), Integer.parseInt(userId));
     }
 
-    @GetMapping("/popular")                                // получение самых популярных фильмов
-    @ResponseBody
+    /**
+     * метод получения списка самых популярных фильмов с наибольшим количеством лайков
+     */
+    @GetMapping("/popular")
     public List<Film> findPopularFilms(@RequestParam(defaultValue = "10", required = false) String count) {
         return filmService.findPopularFilms(Integer.parseInt(count));
     }
