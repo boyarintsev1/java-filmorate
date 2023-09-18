@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * created by Andrey
- * версия 1.7
+ * версия 1.8
  * от 2023-09-18
  */
 
