@@ -1,77 +1,85 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
+/**
+ * класс - контроллер для управления данными о Film
+ */
 
 @RestController
 @ResponseBody
 @Slf4j
 @RequestMapping("/films")
-
 public class FilmController {
-    final Map<Integer, Film> films = new HashMap<>();
-    int id = 0;
+    private final FilmService filmService;
 
-    @GetMapping                                                    // получение всех фильмов
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
+
+    /**
+     * метод получения данных о всех фильмах
+     */
+    @GetMapping
     public Collection<Film> findAllFilms() {
-        return films.values();
+        return filmService.findAllFilms();
     }
 
+    /**
+     * метод получения данных о фильме по его ID
+     */
+    @GetMapping("/{id}")
+    public Film findFilmById(@PathVariable("id") String id) {
+        return filmService.findFilmById(Integer.parseInt(id));
+    }
+
+    /**
+     * метод создания нового фильма
+     */
     @PostMapping
-    public Film createFilm(@Valid @RequestBody Film film) {        //создание нового фильма
-        if (films.containsValue(film)) {
-            log.error("Фильм с названием <" +
-                    film.getName() + "> и датой релиза <" + film.getReleaseDate() +
-                    "> уже зарегистрирован в системе. Его нельзя создать. " +
-                    "Можно только обновить данные (метод PUT).");
-            throw new ValidationException("Фильм с названием <" +
-                    film.getName() + "> и датой релиза<" + film.getReleaseDate() +
-                    "> уже зарегистрирован в системе. Его нельзя создать. " +
-                    "Можно только обновить данные (метод PUT).");
-        }
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.error("Дата релиза не может быть ранее 28 декабря 1895 г.");
-            throw new ValidationException("Дата релиза не может быть ранее 28 декабря 1895 г.");
-        }
-        id = id + 1;
-        film.setId(id);
-        log.info("Будет сохранен объект: {}", film);
-        films.put(film.getId(), film);
-        return film;
+    public Film createFilm(@Valid @RequestBody Film film) {
+        return filmService.createFilm(film);
     }
 
+    /**
+     * метод обновления данных о фильме
+     */
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) {        //обновление данных о фильме
-        if (!films.containsKey(film.getId())) {
-            log.error("Фильм с ID <" + film.getId() + "> с названием <" +
-                    film.getName() + "> и датой релиза <" + film.getReleaseDate() +
-                    "> ещё не зарегистрирован в системе. Его нельзя обновить. " +
-                    "Его нужно сначала создать (метод POST).");
-            throw new ValidationException("Фильм с ID <" + film.getId() + "> с названием <" +
-                    film.getName() + "> и датой релиза<" + film.getReleaseDate() +
-                    "> ещё не зарегистрирован в системе. Его нельзя обновить. " +
-                    "Его нужно сначала создать (метод POST).");
-        } else {
-            log.info("Будет обновлен объект: {}", film);
-            films.put(film.getId(), film);
-        }
-        if (film.getDescription().length() > 200) {
-            log.error("Описание фильма не может быть длиннее 200 символов.");
-            throw new ValidationException("Описание фильма не может быть длиннее 200 символов.");
-        }
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.error("Дата релиза не может быть ранее 28 декабря 1895 г.");
-            throw new ValidationException("Дата релиза не может быть ранее 28 декабря 1895 г.");
-        }
-        return film;
+    public Film updateFilm(@Valid @RequestBody Film film) {
+        return filmService.updateFilm(film);
+    }
+
+    /**
+     * метод добавления лайка пользователя к фильму
+     */
+    @PutMapping("/{id}/like/{userId}")
+    public Film addNewLike(@PathVariable("id") String id, @PathVariable("userId") String userId) {
+        return filmService.addNewLike(Integer.parseInt(id), Integer.parseInt(userId));
+    }
+
+    /**
+     * метод удаления лайка пользователя из фильма
+     */
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film deleteLike(@PathVariable("id") String id, @PathVariable("userId") String userId) {
+        return filmService.deleteLike(Integer.parseInt(id), Integer.parseInt(userId));
+    }
+
+    /**
+     * метод получения списка самых популярных фильмов с наибольшим количеством лайков
+     */
+    @GetMapping("/popular")
+    public List<Film> findPopularFilms(@RequestParam(defaultValue = "10", required = false) String count) {
+        return filmService.findPopularFilms(Integer.parseInt(count));
     }
 }
 

@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class User {
@@ -26,10 +28,12 @@ public class User {
     @EqualsAndHashCode.Exclude
     @Past(message = "Дата рождения не может быть из будущего")
     private final LocalDate birthday;
+    private Set<Integer> friends = new HashSet<>();
 
     public void setId(int id) {
         this.id = id;
     }
+
 }
 
 

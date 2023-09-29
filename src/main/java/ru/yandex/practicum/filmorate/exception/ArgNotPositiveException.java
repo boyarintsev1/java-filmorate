@@ -1,9 +1,9 @@
 package ru.yandex.practicum.filmorate.exception;
 
-public class ValidationException extends RuntimeException {
+public class ArgNotPositiveException extends RuntimeException {
     private final String parameter;
 
-    public ValidationException(String parameter) {
+    public ArgNotPositiveException(String parameter) {
         this.parameter = parameter;
     }
 
@@ -11,3 +11,4 @@ public class ValidationException extends RuntimeException {
         return parameter;
     }
 }
+
