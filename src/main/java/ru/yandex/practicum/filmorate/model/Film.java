@@ -29,7 +29,12 @@ public class Film  {
     private final int duration;
     @EqualsAndHashCode.Exclude
     private int rate;
+    @EqualsAndHashCode.Exclude
     private Set<Integer> likes = new HashSet<>();
+    @EqualsAndHashCode.Exclude
+    private String genre;
+    @EqualsAndHashCode.Exclude
+    private String MPA_rating;
 
     public void setId(int id) {
         this.id = id;

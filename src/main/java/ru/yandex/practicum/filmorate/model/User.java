@@ -28,7 +28,10 @@ public class User {
     @EqualsAndHashCode.Exclude
     @Past(message = "Дата рождения не может быть из будущего")
     private final LocalDate birthday;
+    @EqualsAndHashCode.Exclude
     private Set<Integer> friends = new HashSet<>();
+    @EqualsAndHashCode.Exclude
+    private final String friendshipStatus;
 
     public void setId(int id) {
         this.id = id;
