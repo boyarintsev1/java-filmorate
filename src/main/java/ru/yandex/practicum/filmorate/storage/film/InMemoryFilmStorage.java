@@ -94,7 +94,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public List<Mpa> findAllMpaRatings() {
         List<Mpa> mpaRatingsList = new ArrayList<>();
         for (int i = 0; i < Mpa.mpa_rating_names.length; i++) {
-            mpaRatingsList.add(new Mpa (i+1, Mpa.mpa_rating_names[i]));
+            mpaRatingsList.add(new Mpa(i+1, Mpa.mpa_rating_names[i]));
         }
         return mpaRatingsList;
     }

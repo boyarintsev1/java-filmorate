@@ -19,7 +19,7 @@ public class InMemoryUserService implements UserService {
     private final UserStorage userStorage;
 
     @Autowired
-    public InMemoryUserService (@Qualifier(value = "inMemoryUserStorage") UserStorage userStorage) {
+    public InMemoryUserService(@Qualifier(value = "inMemoryUserStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
