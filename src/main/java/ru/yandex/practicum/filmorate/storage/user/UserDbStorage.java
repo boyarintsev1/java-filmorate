@@ -21,16 +21,16 @@ import java.util.*;
 public class UserDbStorage implements UserStorage {
     private final Logger log = LoggerFactory.getLogger(UserDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
-    private final static String SELECT_ALL_USERS_QUERY = "select * from USERS";
-    private final static String SELECT_USER_BY_ID_QUERY = "select * from USERS where id= ";
-    private final static String INSERT_USER_CREATE_QUERY =
+    private static final String SELECT_ALL_USERS_QUERY = "select * from USERS";
+    private static final String SELECT_USER_BY_ID_QUERY = "select * from USERS where id= ";
+    private static final String INSERT_USER_CREATE_QUERY =
             "insert into USERS (id, login, name,  email, birthday) VALUES (nextval('users_seq'),?, ?, ?, ?)";
-    private final static String INSERT_IN_FRIENDSHIP_QUERY =
+    private static final String INSERT_IN_FRIENDSHIP_QUERY =
             "insert into FRIENDSHIP (user_id, friend_id) VALUES (?, ?)";
-    private final static String SELECT_FRIENDS_BY_USER_ID_QUERY = "select * from FRIENDSHIP WHERE user_id= ";
-    private final static String UPDATE_USER_QUERY =
+    private static final String SELECT_FRIENDS_BY_USER_ID_QUERY = "select * from FRIENDSHIP WHERE user_id= ";
+    private static final String UPDATE_USER_QUERY =
             "update USERS SET login= ?, name= ?, email= ?, birthday= ? where id= ?";
-    private final static String DELETE_FROM_FRIENDSHIP = "delete from FRIENDSHIP where user_id = ?";
+    private static final String DELETE_FROM_FRIENDSHIP = "delete from FRIENDSHIP where user_id = ?";
 
     public UserDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

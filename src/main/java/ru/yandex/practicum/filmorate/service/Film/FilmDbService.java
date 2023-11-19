@@ -25,8 +25,8 @@ public class FilmDbService implements FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
     private final JdbcTemplate jdbcTemplate;
-    private final static String INSERT_IN_LIKES_QUERY = "insert into LIKES (film_id, user_id) VALUES (?, ?)";
-    private final static String DELETE_IN_LIKES_QUERY = "delete from LIKES  WHERE film_id= ? AND user_id=?";
+    private static final String INSERT_IN_LIKES_QUERY = "insert into LIKES (film_id, user_id) VALUES (?, ?)";
+    private static final String DELETE_IN_LIKES_QUERY = "delete from LIKES  WHERE film_id= ? AND user_id=?";
 
     @Autowired
     public FilmDbService(@Qualifier(value = "filmDbStorage") FilmStorage filmStorage,

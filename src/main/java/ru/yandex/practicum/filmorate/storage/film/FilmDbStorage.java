@@ -25,23 +25,23 @@ public class FilmDbStorage implements FilmStorage {
     private final Logger log = LoggerFactory.getLogger(FilmDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
 
-    private final static String SELECT_ALL_FILMS_QUERY = "select * from FILMS";
-    private final static String SELECT_FILM_BY_ID_QUERY = "select * from FILMS where id =";
-    private final static String SELECT_ALL_GENRES = "select * from GENRES order by id";
-    private final static String SELECT_GENRE_BY_ID_QUERY = "select * from GENRES where id =";
-    private final static String SELECT_ALL_MPA_RATING_QUERY = "select * from MPA_RATING order by id";
-    private final static String SELECT_MPA_RATING_BY_ID_QUERY = "select * from MPA_RATING where id =";
-    private final static String SELECT_LIKES_BY_FILM_ID_QUERY = "select * from LIKES where film_id =";
-    private final static String SELECT_GENRES_BY_FILM_ID_QUERY = "select f.genre_id, g.name from FILMS_GENRES AS f " +
+    private static final String SELECT_ALL_FILMS_QUERY = "select * from FILMS";
+    private static final String SELECT_FILM_BY_ID_QUERY = "select * from FILMS where id =";
+    private static final String SELECT_ALL_GENRES = "select * from GENRES order by id";
+    private static final String SELECT_GENRE_BY_ID_QUERY = "select * from GENRES where id =";
+    private static final String SELECT_ALL_MPA_RATING_QUERY = "select * from MPA_RATING order by id";
+    private static final String SELECT_MPA_RATING_BY_ID_QUERY = "select * from MPA_RATING where id =";
+    private static final String SELECT_LIKES_BY_FILM_ID_QUERY = "select * from LIKES where film_id =";
+    private static final String SELECT_GENRES_BY_FILM_ID_QUERY = "select f.genre_id, g.name from FILMS_GENRES AS f " +
             "inner join GENRES AS g ON f.genre_id = g.id where f.film_id = ";
-    private final static String INSERT_FILM_CREATE_QUERY = "insert into FILMS" +
+    private static final String INSERT_FILM_CREATE_QUERY = "insert into FILMS" +
             "(id, name, description, releaseDate, duration, mpa_rating_id)" +
             "VALUES (nextval('films_seq'),?, ?, ?, ?, ?)";
-    private final static String INSERT_FILMS_GENRES_QUERY = "insert into FILMS_GENRES (film_id, genre_id)" +
+    private static final String INSERT_FILMS_GENRES_QUERY = "insert into FILMS_GENRES (film_id, genre_id)" +
             "VALUES (?, ?)";
-    private final static String UPDATE_FILM_QUERY = "update FILMS SET " +
+    private static final String UPDATE_FILM_QUERY = "update FILMS SET " +
             "name= ?, description= ?, releaseDate= ?, duration= ?, mpa_rating_id= ? where id = ?";
-    private final static String DELETE_FROM_FILMS_GENRES = "delete from FILMS_GENRES where film_id = ?";
+    private static final String DELETE_FROM_FILMS_GENRES = "delete from FILMS_GENRES where film_id = ?";
 
     public FilmDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

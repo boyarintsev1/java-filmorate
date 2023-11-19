@@ -19,9 +19,9 @@ import java.util.*;
 public class UserDbService implements UserService {
     private final UserStorage userStorage;
     private final JdbcTemplate jdbcTemplate;
-    private final static String INSERT_IN_FRIENDSHIP_QUERY =
+    private static final String INSERT_IN_FRIENDSHIP_QUERY =
             "insert into FRIENDSHIP (user_id, friend_id) VALUES (?, ?)";
-    private final static String DELETE_IN_FRIENDSHIP_QUERY =
+    private static final String DELETE_IN_FRIENDSHIP_QUERY =
             "delete from FRIENDSHIP  WHERE user_id= ? AND friend_id=?";
 
     @Autowired
