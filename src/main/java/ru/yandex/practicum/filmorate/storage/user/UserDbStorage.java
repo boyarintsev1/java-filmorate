@@ -26,11 +26,11 @@ public class UserDbStorage implements UserStorage {
     private static final String INSERT_USER_CREATE_QUERY =
             "insert into USERS (id, login, name,  email, birthday) VALUES (nextval('users_seq'),?, ?, ?, ?)";
     private static final String INSERT_IN_FRIENDSHIP_QUERY =
-            "insert into FRIENDSHIP (user_id, friend_id) VALUES (?, ?)";
-    private static final String SELECT_FRIENDS_BY_USER_ID_QUERY = "select * from FRIENDSHIP WHERE user_id= ";
+            "insert into FRIENDSHIP (userId, friend_id) VALUES (?, ?)";
+    private static final String SELECT_FRIENDS_BY_USER_ID_QUERY = "select * from FRIENDSHIP WHERE userId= ";
     private static final String UPDATE_USER_QUERY =
             "update USERS SET login= ?, name= ?, email= ?, birthday= ? where id= ?";
-    private static final String DELETE_FROM_FRIENDSHIP = "delete from FRIENDSHIP where user_id = ?";
+    private static final String DELETE_FROM_FRIENDSHIP = "delete from FRIENDSHIP where userId = ?";
 
     public UserDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -97,14 +97,14 @@ public class UserDbStorage implements UserStorage {
                     user.getEmail(),
                     user.getBirthday());
             String sql = "select id from USERS where email ='" + user.getEmail() + "'";
-            Long user_id = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> rs.getLong("id"));
+            Long userId = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> rs.getLong("id"));
             if (user.getFriends() != null) {
                 for (Long i : user.getFriends()) {
-                    jdbcTemplate.update(INSERT_IN_FRIENDSHIP_QUERY, user_id, i);
+                    jdbcTemplate.update(INSERT_IN_FRIENDSHIP_QUERY, userId, i);
                 }
             }
-            log.info("Будет сохранен объект: {}", findUserById(user_id));
-            return findUserById(user_id);
+            log.info("Будет сохранен объект: {}", findUserById(userId));
+            return findUserById(userId);
         } catch (Exception e) {
             throw new ValidationException("email");
         }

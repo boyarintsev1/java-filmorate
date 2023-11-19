@@ -20,9 +20,9 @@ public class UserDbService implements UserService {
     private final UserStorage userStorage;
     private final JdbcTemplate jdbcTemplate;
     private static final String INSERT_IN_FRIENDSHIP_QUERY =
-            "insert into FRIENDSHIP (user_id, friend_id) VALUES (?, ?)";
+            "insert into FRIENDSHIP (userId, friend_id) VALUES (?, ?)";
     private static final String DELETE_IN_FRIENDSHIP_QUERY =
-            "delete from FRIENDSHIP  WHERE user_id= ? AND friend_id=?";
+            "delete from FRIENDSHIP  WHERE userId= ? AND friend_id=?";
 
     @Autowired
     public UserDbService(@Qualifier(value = "userDbStorage") UserStorage userStorage, JdbcTemplate jdbcTemplate) {

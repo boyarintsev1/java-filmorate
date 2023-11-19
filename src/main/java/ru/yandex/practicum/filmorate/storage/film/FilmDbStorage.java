@@ -31,17 +31,17 @@ public class FilmDbStorage implements FilmStorage {
     private static final String SELECT_GENRE_BY_ID_QUERY = "select * from GENRES where id =";
     private static final String SELECT_ALL_MPA_RATING_QUERY = "select * from MPA_RATING order by id";
     private static final String SELECT_MPA_RATING_BY_ID_QUERY = "select * from MPA_RATING where id =";
-    private static final String SELECT_LIKES_BY_FILM_ID_QUERY = "select * from LIKES where film_id =";
+    private static final String SELECT_LIKES_BY_FILM_ID_QUERY = "select * from LIKES where filmId =";
     private static final String SELECT_GENRES_BY_FILM_ID_QUERY = "select f.genre_id, g.name from FILMS_GENRES AS f " +
-            "inner join GENRES AS g ON f.genre_id = g.id where f.film_id = ";
+            "inner join GENRES AS g ON f.genre_id = g.id where f.filmId = ";
     private static final String INSERT_FILM_CREATE_QUERY = "insert into FILMS" +
             "(id, name, description, releaseDate, duration, mpa_rating_id)" +
             "VALUES (nextval('films_seq'),?, ?, ?, ?, ?)";
-    private static final String INSERT_FILMS_GENRES_QUERY = "insert into FILMS_GENRES (film_id, genre_id)" +
+    private static final String INSERT_FILMS_GENRES_QUERY = "insert into FILMS_GENRES (filmId, genre_id)" +
             "VALUES (?, ?)";
     private static final String UPDATE_FILM_QUERY = "update FILMS SET " +
             "name= ?, description= ?, releaseDate= ?, duration= ?, mpa_rating_id= ? where id = ?";
-    private static final String DELETE_FROM_FILMS_GENRES = "delete from FILMS_GENRES where film_id = ?";
+    private static final String DELETE_FROM_FILMS_GENRES = "delete from FILMS_GENRES where filmId = ?";
 
     public FilmDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -115,14 +115,14 @@ public class FilmDbStorage implements FilmStorage {
                     film.getMpa().getId());
             String sql = "select id from FILMS where name ='" + film.getName()
                     + "' and releaseDate = '" + film.getReleaseDate() + "'";
-            Long film_id = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> rs.getLong("id"));
+            Long filmId = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> rs.getLong("id"));
             if (film.getGenres() != null) {
                 for (Genre i : film.getGenres()) {
-                    jdbcTemplate.update(INSERT_FILMS_GENRES_QUERY, film_id, i.getId());
+                    jdbcTemplate.update(INSERT_FILMS_GENRES_QUERY, filmId, i.getId());
                 }
             }
-            log.info("Будет сохранен объект: {}", findFilmById(film_id));
-            return findFilmById(film_id);
+            log.info("Будет сохранен объект: {}", findFilmById(filmId));
+            return findFilmById(filmId);
         } catch (Exception e) {
             throw new ValidationException("FILM: film_name + releaseDate");
         }
@@ -201,7 +201,7 @@ public class FilmDbStorage implements FilmStorage {
     public Set<Long> findLikesByFilmId(Long id) {
         try {
             String sql = SELECT_LIKES_BY_FILM_ID_QUERY + id;
-            return new HashSet<>(jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("user_id")));
+            return new HashSet<>(jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("userId")));
         } catch (Exception e) {
             throw new IncorrectIdException("Film_ID");
         }

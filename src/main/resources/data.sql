@@ -27,17 +27,17 @@ VALUES (nextval('mpa_seq'),'G'),
 -- VALUES (nextval('films_seq'),'Interstellar', 'About the theory of relativity', '2014-10-26', '169', '4'),
 --        (nextval('films_seq'),'Eternal Sunshine of the Spotless Mind', 'Застенчивый и меланхоличный Джозл...', '2004-03-09', '108', '5');
 
--- INSERT INTO FILMS_GENRES (film_id, genre_id)
+-- INSERT INTO FILMS_GENRES (filmId, genre_id)
 -- VALUES ('1', '7'),
 --        ('1', '2'),
 --        ('2', '1');
 
--- INSERT INTO LIKES (user_id,film_id)
+-- INSERT INTO LIKES (userId,filmId)
 -- VALUES ('1', '1'),
 --        ('1', '2'),
  --       ('2', '1');
 
--- INSERT INTO FRIENDSHIP (user_id,friend_id)
+-- INSERT INTO FRIENDSHIP (userId,friend_id)
 --        VALUES ('1', '2'),
 --               ('1', '3'),
 --               ('2', '3'),
