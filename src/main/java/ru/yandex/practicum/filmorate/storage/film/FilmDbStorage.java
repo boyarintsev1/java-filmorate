@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.exception.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA_rating;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -178,23 +178,23 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public List<MPA_rating> findAllMpaRatings() {
+    public List<Mpa> findAllMpaRatings() {
         try {
             return jdbcTemplate.query(SELECT_ALL_MPA_RATING_QUERY, (rs, rowNum) ->
-                    new MPA_rating(rs.getInt("id"), rs.getString("name")));
+                    new Mpa(rs.getInt("id"), rs.getString("name")));
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при загрузке рейтингов MPA");
         }
     }
 
     @Override
-    public MPA_rating findMpaRatingById(int id) {
+    public Mpa findMpaRatingById(int id) {
         try {
             String sql = SELECT_MPA_RATING_BY_ID_QUERY + id;
             return jdbcTemplate.queryForObject(sql,
-                    (rs, rowNum) -> new MPA_rating(rs.getInt("id"), rs.getString("name")));
+                    (rs, rowNum) -> new Mpa(rs.getInt("id"), rs.getString("name")));
         } catch (Exception e) {
-            throw new IncorrectIdException("MPA_rating_ID");
+            throw new IncorrectIdException("Mpa_ID");
         }
     }
 

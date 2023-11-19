@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.storage.film;
 
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA_rating;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.Collection;
 import java.util.List;
@@ -51,10 +51,10 @@ public interface FilmStorage {
     /**
      * метод получения данных о всех рейтингах MPA фильмов
      */
-    List<MPA_rating> findAllMpaRatings();
+    List<Mpa> findAllMpaRatings();
 
     /**
      * метод получения данных о рейтинге MPA по его ID
      */
-    MPA_rating findMpaRatingById(int id);
+    Mpa findMpaRatingById(int id);
 }

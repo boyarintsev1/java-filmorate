@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @JsonPropertyOrder({"id", "name"})
-public class MPA_rating {
+public class Mpa {
     private int id;
     @NotNull
     @NotEmpty
@@ -23,7 +23,7 @@ public class MPA_rating {
     // R — лицам до 17 лет просматривать фильм можно только в присутствии взрослого,
     // NC-17 — лицам до 18 лет просмотр запрещён.
 
-    public MPA_rating(int id, String name) {
+    public Mpa (int id, String name) {
         this.id = id;
         this.name = name;
     }

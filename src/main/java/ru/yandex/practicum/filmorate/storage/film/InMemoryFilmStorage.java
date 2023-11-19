@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.exception.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA_rating;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -91,20 +91,20 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<MPA_rating> findAllMpaRatings() {
-        List<MPA_rating> mpaRatingsList = new ArrayList<>();
-        for (int i = 0; i < MPA_rating.mpa_rating_names.length; i++) {
-            mpaRatingsList.add(new MPA_rating (i+1, MPA_rating.mpa_rating_names[i]));
+    public List<Mpa> findAllMpaRatings() {
+        List<Mpa> mpaRatingsList = new ArrayList<>();
+        for (int i = 0; i < Mpa.mpa_rating_names.length; i++) {
+            mpaRatingsList.add(new Mpa (i+1, Mpa.mpa_rating_names[i]));
         }
         return mpaRatingsList;
     }
 
     @Override
-    public MPA_rating findMpaRatingById(int id) {
+    public Mpa findMpaRatingById(int id) {
         try {
             return (findAllMpaRatings().get(id-1));
         } catch (Exception e) {
-            throw new IncorrectIdException("MPA_rating");
+            throw new IncorrectIdException("Mpa");
         }
     }
 }

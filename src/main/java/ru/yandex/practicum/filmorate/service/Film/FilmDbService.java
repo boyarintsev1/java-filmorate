@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.exception.ArgNotPositiveException;
 import ru.yandex.practicum.filmorate.exception.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA_rating;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -132,12 +132,12 @@ public class FilmDbService implements FilmService {
     }
 
     @Override
-    public List<MPA_rating> findAllMpaRatings() {                           // получение названий всех рейтингов МРА
+    public List<Mpa> findAllMpaRatings() {                           // получение названий всех рейтингов МРА
         return filmStorage.findAllMpaRatings();
     }
 
     @Override
-    public MPA_rating findMpaRatingById(int id) {                          // получение жанра по ID
+    public Mpa findMpaRatingById(int id) {                          // получение жанра по ID
         return filmStorage.findMpaRatingById(id);
     }
 }

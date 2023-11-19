@@ -11,7 +11,7 @@ import ru.yandex.practicum.filmorate.exception.ArgNotPositiveException;
 import ru.yandex.practicum.filmorate.exception.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.MPA_rating;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.Film.FilmDbService;
 import ru.yandex.practicum.filmorate.service.Film.FilmService;
@@ -73,12 +73,12 @@ public class FilmControllerTest {
         final List<Film> result = new ArrayList<>();
         Film film1 = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(2014, 10, 26),
-                169, null, new MPA_rating(1, "G"));
-        film1.setMpa(new MPA_rating(2, "PG"));
+                169, null, new Mpa(1, "G"));
+        film1.setMpa(new Mpa(2, "PG"));
         Film film2 = new Film("Eternal Sunshine of the Spotless Mind",
                 "Застенчивый и меланхоличный Джоэл",
                 LocalDate.of(2004, 3, 9),
-                108, null, new MPA_rating(2, "PG"));
+                108, null, new Mpa(2, "PG"));
 
         FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
@@ -101,7 +101,7 @@ public class FilmControllerTest {
         //given
         Film film1 = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(2014, 10, 26),
-                169, null, new MPA_rating(1, "G"));
+                169, null, new Mpa(1, "G"));
         FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
 
@@ -126,7 +126,7 @@ public class FilmControllerTest {
         //given
         Film film1 = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(2014, 10, 26),
-                169, null, new MPA_rating(1, "G"));
+                169, null, new Mpa(1, "G"));
         FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
 
@@ -146,7 +146,7 @@ public class FilmControllerTest {
         // given
         Film film = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(2014, 10, 26),
-                169, null, new MPA_rating(1, "G"));
+                169, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта film");
@@ -169,7 +169,7 @@ public class FilmControllerTest {
         // given
         Film film = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(2014, 10, 26),
-                169, null, new MPA_rating(1, "G"));
+                169, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта film");
@@ -198,7 +198,7 @@ public class FilmControllerTest {
                         "regions of space-time across a long distance) on a journey to surpass previous restrictions " +
                         "on human space travel and find a planet with suitable human conditions.",
                 LocalDate.of(2014, 10, 26),
-                169, null, new MPA_rating(1, "G"));
+                169, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта film");
@@ -223,7 +223,7 @@ public class FilmControllerTest {
         // given
         Film film = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
-                169, null, new MPA_rating(1, "G"));
+                169, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта film");
@@ -245,7 +245,7 @@ public class FilmControllerTest {
         // given
         Film film = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
-                0, null, new MPA_rating(1, "G"));
+                0, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта film");
@@ -270,7 +270,7 @@ public class FilmControllerTest {
         // given
         Film film = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
-                0, null, new MPA_rating(1, "G"));
+                0, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта film");
@@ -299,7 +299,7 @@ public class FilmControllerTest {
         //given
         Film film1 = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
-                0, null, new MPA_rating(1, "G"));
+                0, null, new Mpa(1, "G"));
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",
@@ -327,7 +327,7 @@ public class FilmControllerTest {
         //given
         Film film1 = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
-                0, null, new MPA_rating(1, "G"));
+                0, null, new Mpa(1, "G"));
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",
@@ -355,7 +355,7 @@ public class FilmControllerTest {
         //given
         Film film1 = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
-                0, null, new MPA_rating(1, "G"));
+                0, null, new Mpa(1, "G"));
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",
@@ -383,7 +383,7 @@ public class FilmControllerTest {
         //given
         Film film1 = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
-                0, null, new MPA_rating(1, "G"));
+                0, null, new Mpa(1, "G"));
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",
@@ -412,11 +412,11 @@ public class FilmControllerTest {
         //given
         Film film1 = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
-                0, null, new MPA_rating(1, "G"));
+                0, null, new Mpa(1, "G"));
         Film film2 = new Film("Eternal Sunshine of the Spotless Mind",
                 "Застенчивый и меланхоличный Джоэл",
                 LocalDate.of(2004, 3, 9),
-                108, null, new MPA_rating(2, "PG"));
+                108, null, new Mpa(2, "PG"));
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",
@@ -448,11 +448,11 @@ public class FilmControllerTest {
         //given
         Film film1 = new Film("Interstellar","About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
-                0, null, new MPA_rating(1, "G"));
+                0, null, new Mpa(1, "G"));
         Film film2 = new Film("Eternal Sunshine of the Spotless Mind",
                 "Застенчивый и меланхоличный Джоэл",
                 LocalDate.of(2004, 3, 9),
-                108, null, new MPA_rating(2, "PG"));
+                108, null, new Mpa(2, "PG"));
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",

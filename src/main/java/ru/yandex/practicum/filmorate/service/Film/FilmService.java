@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.service.Film;
 
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA_rating;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,61 +13,61 @@ import java.util.Map;
  */
 public interface FilmService {
 
-    public Map<Long, Film> getFilms();
+    Map<Long, Film> getFilms();
 
     /**
      * метод получения данных о всех фильмах
      */
-    public Collection<Film> findAllFilms();
+    Collection<Film> findAllFilms();
 
     /**
      * метод получения данных о фильме по его ID
      */
-    public Film findFilmById(long id);
+    Film findFilmById(long id);
 
     /**
      * метод создания нового фильма
      */
-    public Film createFilm(Film film);
+    Film createFilm(Film film);
 
     /**
      * метод обновления данных о фильме
      */
-    public Film updateFilm(Film film);
+    Film updateFilm(Film film);
 
     /**
      * метод добавления лайка пользователя к фильму
      */
-    public Film addNewLike(long id, long userId);
+    Film addNewLike(long id, long userId);
 
     /**
      * метод удаления лайка пользователя из фильма
      */
-    public Film deleteLike(long id, long userId);
+    Film deleteLike(long id, long userId);
 
     /**
      * метод получения списка самых популярных фильмов с наибольшим количеством лайков
      */
-    public List<Film> findPopularFilms(int count);
+    List<Film> findPopularFilms(int count);
 
     /**
      * метод получения списка всех возможных жанров фильмов
      */
-    public List<Genre> findAllGenres();
+    List<Genre> findAllGenres();
 
     /**
      * метод получения названия жанра по его ID
      */
-    public Genre findGenreById(int id);
+    Genre findGenreById(int id);
 
     /**
      * метод получения списка всех возможных рейтингов МРА
      */
-    public List<MPA_rating> findAllMpaRatings();
+    List<Mpa> findAllMpaRatings();
 
     /**
      * метод получения рейтинга МРА по ID
      */
-    public MPA_rating findMpaRatingById(int id);
+    Mpa findMpaRatingById(int id);
 
 }

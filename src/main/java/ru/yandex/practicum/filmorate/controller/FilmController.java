@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA_rating;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.Film.FilmService;
 
 import javax.validation.Valid;
@@ -104,7 +104,7 @@ public class FilmController {
      * метод получения списка всех возможных рейтингов МРА
      */
     @GetMapping("/mpa")
-    public List<MPA_rating> findAllMpaRatings() {
+    public List<Mpa> findAllMpaRatings() {
         return filmService.findAllMpaRatings();
     }
 
@@ -112,7 +112,7 @@ public class FilmController {
      * метод получения названия рейтинга МРА по ID
      */
     @GetMapping("/mpa/{id}")
-    public MPA_rating findMpaRatingById(@PathVariable("id") String id) {
+    public Mpa findMpaRatingById(@PathVariable("id") String id) {
         return filmService.findMpaRatingById(Integer.parseInt(id));
     }
 }

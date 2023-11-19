@@ -35,7 +35,7 @@ public class Film {
     @EqualsAndHashCode.Exclude
     private Set<Genre> genres;
     @EqualsAndHashCode.Exclude
-    private MPA_rating mpa;
+    private Mpa mpa;
     @EqualsAndHashCode.Exclude
     private Set<Long> likes = new HashSet<>();
 
@@ -45,7 +45,7 @@ public class Film {
                 LocalDate releaseDate,
                 int duration,
                 Set<Genre> genres,
-                MPA_rating mpa) {
+                Mpa mpa) {
         this.id = getId();
         this.name = name;
         this.description = description;
@@ -64,7 +64,7 @@ public class Film {
                 int duration,
                 int rate,
                 Set<Genre> genres,
-                MPA_rating mpa,
+                Mpa mpa,
                 Set<Long> likes) {
         this.id = id;
         this.name = name;
@@ -117,11 +117,11 @@ public class Film {
         this.genres = genres;
     }
 
-    public MPA_rating getMpa() {
+    public Mpa getMpa() {
         return mpa;
     }
 
-    public void setMpa(MPA_rating mpa) {
+    public void setMpa(Mpa mpa) {
         this.mpa = mpa;
     }
 
