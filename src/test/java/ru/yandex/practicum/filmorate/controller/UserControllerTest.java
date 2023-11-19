@@ -42,8 +42,8 @@ class UserControllerTest {
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         userController.createUser(user2);
@@ -63,8 +63,8 @@ class UserControllerTest {
         //given
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         user1.setId(1L);
@@ -85,8 +85,8 @@ class UserControllerTest {
         //given
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         String id = "5";
@@ -105,8 +105,8 @@ class UserControllerTest {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         // when
         User result = userController.createUser(user);
         // then
@@ -126,8 +126,8 @@ class UserControllerTest {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта user");
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             User result = userController.createUser(user);
@@ -149,8 +149,8 @@ class UserControllerTest {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             final ValidationException exception = assertThrows(
@@ -170,8 +170,8 @@ class UserControllerTest {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             User result = userController.createUser(user);
@@ -193,8 +193,8 @@ class UserControllerTest {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта user");
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             User result = userController.createUser(user);
@@ -216,8 +216,8 @@ class UserControllerTest {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             userController.createUser(user);
@@ -240,8 +240,8 @@ class UserControllerTest {
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         user1.setId(1L);
@@ -266,8 +266,8 @@ class UserControllerTest {
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         user1.setId(1L);
@@ -291,8 +291,8 @@ class UserControllerTest {
                 LocalDate.of(2012, 4, 3), null);
         User user3 = new User("Batman2", "Felix","felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         user1.setId(1L);
@@ -323,8 +323,8 @@ class UserControllerTest {
                 LocalDate.of(1946, 8, 20),null);
         User user2 = new User("Robocop", "Billy","email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         user1.setId(1L);
@@ -347,8 +347,8 @@ class UserControllerTest {
                 LocalDate.of(2012, 4, 3), null);
         User user3 = new User("Batman2", "Felix","felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         user1.setId(1L);
@@ -376,8 +376,8 @@ class UserControllerTest {
                 LocalDate.of(2012, 4, 3), null);
         User user3 = new User("Batman2", "Felix","felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         user1.setId(1L);
@@ -406,8 +406,8 @@ class UserControllerTest {
                 LocalDate.of(2012, 4, 3), null);
         User user3 = new User("Batman2", "Felix","felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         user1.setId(1L);
@@ -436,8 +436,8 @@ class UserControllerTest {
                 LocalDate.of(2012, 4, 3), null);
         User user3 = new User("Batman2", "Felix","felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
-        UserController userController = new UserController(new UserDbService
-                (new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         user1.setId(1L);
