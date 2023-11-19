@@ -75,8 +75,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public List<Genre> findAllGenres() {
         List<Genre> genresList = new ArrayList<>();
-            for (int i = 0; i < Genre.genres_names.length; i++) {
-                genresList.add(new Genre(i+1, Genre.genres_names[i]));
+            for (int i = 0; i < Genre.genres_names.length;i++) {
+                genresList.add(new Genre(i + 1, Genre.genres_names[i]));
             }
             return genresList;
         }
@@ -84,7 +84,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Genre findGenreById(int id) {
         try {
-            return (findAllGenres().get(id-1));
+            return (findAllGenres().get(id - 1));
         } catch (Exception e) {
             throw new IncorrectIdException("Genre_ID");
         }
@@ -94,7 +94,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public List<Mpa> findAllMpaRatings() {
         List<Mpa> mpaRatingsList = new ArrayList<>();
         for (int i = 0; i < Mpa.mpa_rating_names.length; i++) {
-            mpaRatingsList.add(new Mpa(i+1, Mpa.mpa_rating_names[i]));
+            mpaRatingsList.add(new Mpa(i + 1, Mpa.mpa_rating_names[i]));
         }
         return mpaRatingsList;
     }
@@ -102,7 +102,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Mpa findMpaRatingById(int id) {
         try {
-            return (findAllMpaRatings().get(id-1));
+            return (findAllMpaRatings().get(id - 1));
         } catch (Exception e) {
             throw new IncorrectIdException("Mpa");
         }
