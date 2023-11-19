@@ -16,7 +16,6 @@ import java.util.List;
 @RestControllerAdvice(value = "ru.yandex.practicum.filmorate.controller")
 @Slf4j
 public class ErrorHandler {
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleIncorrectIdException(final IncorrectIdException e) {
@@ -31,6 +30,18 @@ public class ErrorHandler {
                     "Его нужно сначала создать (метод POST).");
             return new ErrorResponse("Фильм с указанным ID ещё не зарегистрирован в системе. Его нельзя обновить. " +
                     "Его нужно сначала создать (метод POST).");
+        }
+        if (e.getParameter().equals("id=friend_id")) {
+            log.error("Пользователь не может дружить сам с собой.");
+            return new ErrorResponse("Пользователь не может дружить сам с собой.");
+        }
+        if (e.getParameter().equals("Row exists")) {
+            log.error("Такая запись уже существует.");
+            return new ErrorResponse("Такая запись уже существует.");
+        }
+        if (e.getParameter().equals("Row doesn't exist")) {
+            log.error("Такая запись не существует.");
+            return new ErrorResponse("Такая запись не существует.");
         }
         log.error("Неверно указан " + e.getParameter());
         return new ErrorResponse(
@@ -58,7 +69,6 @@ public class ErrorHandler {
                 String.format("Неверно указан %s.", e.getParameter()));
     }
 
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleArgNotPositiveException(final ArgNotPositiveException e) {
@@ -77,6 +87,22 @@ public class ErrorHandler {
         }
         if (e.getParameter().equals("releaseDate")) {
             message = "Дата релиза не может быть ранее 28 декабря 1895 г.";
+            log.error(message);
+        }
+        if (e.getParameter().equals("genre_id")) {
+            message = "Необходимо указать корректный ID жанра фильма.";
+            log.error(message);
+        }
+        if (e.getParameter().equals("mpa_rating_id")) {
+            message = "Необходимо указать корректный ID рейтинга MPA.";
+            log.error(message);
+        }
+        if (e.getParameter().equals("FILM: film_name + releaseDate")) {
+            message = "Фильм с таким названием и датой выхода уже есть в базе";
+            log.error(message);
+        }
+        if (e.getParameter().equals("email")) {
+            message = "Пользователь с такой электронной почтой уже есть в базе";
             log.error(message);
         }
         return new ErrorResponse(

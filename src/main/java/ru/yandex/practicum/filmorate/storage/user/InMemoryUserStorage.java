@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exception.IdExistsException;
@@ -9,26 +10,31 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * класс хранения и обработки данных о пользователях User в памяти
+ */
 @Component
+@Qualifier("inMemoryUserStorage")
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
-    final Map<Integer, User> users = new HashMap<>();
-    int id = 0;
+    final Map<Long, User> users = new HashMap<>();
+    long id = 0;
 
-    public Map<Integer, User> getUsers() {
+    @Override
+    public Map<Long, User> getUsers() {
         return users;
     }
 
-    public Collection<User> findAllUsers() {                      // получение всех пользователей
-        return users.values();
+    public List<User> findAllUsers() {                      // получение всех пользователей
+        return (List<User>) users.values();
     }
 
     @Override
-    public User findUserById(int id) {                            // получение пользователя по ID
+    public User findUserById(long id) {                            // получение пользователя по ID
         if (!users.containsKey(id)) {
             throw new IncorrectIdException("UserID");
         }

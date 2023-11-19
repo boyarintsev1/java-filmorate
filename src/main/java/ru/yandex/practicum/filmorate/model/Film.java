@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,9 +11,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class Film  {
+@JsonPropertyOrder({"id", "name", "description", "releaseDate", "duration", "rate", "genres", "mpa", "likes"})
+public class Film {
     @EqualsAndHashCode.Exclude
-    private int id;
+    private long id;
     @NotNull
     @NotEmpty
     @NotBlank
@@ -30,14 +33,105 @@ public class Film  {
     @EqualsAndHashCode.Exclude
     private int rate;
     @EqualsAndHashCode.Exclude
-    private Set<Integer> likes = new HashSet<>();
+    private Set<Genre> genres;
     @EqualsAndHashCode.Exclude
-    private String genre;
+    private MPA_rating mpa;
     @EqualsAndHashCode.Exclude
-    private String MPA_rating;
+    private Set<Long> likes = new HashSet<>();
 
-    public void setId(int id) {
+    @JsonCreator
+    public Film(String name,
+                String description,
+                LocalDate releaseDate,
+                int duration,
+                Set<Genre> genres,
+                MPA_rating mpa) {
+        this.id = getId();
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.genres = genres;
+        System.out.println("здесь ");
+        this.mpa = mpa;
+    }
+
+
+    public Film(Long id,
+                String name,
+                String description,
+                LocalDate releaseDate,
+                int duration,
+                int rate,
+                Set<Genre> genres,
+                MPA_rating mpa,
+                Set<Long> likes) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.rate = rate;
+        this.genres = genres;
+        this.mpa = mpa;
+        this.likes = likes;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
         this.id = id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
+
+    public Set<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public MPA_rating getMpa() {
+        return mpa;
+    }
+
+    public void setMpa(MPA_rating mpa) {
+        this.mpa = mpa;
+    }
+
+    public Set<Long> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Long> likes) {
+        this.likes = likes;
+    }
+
 
 }

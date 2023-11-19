@@ -2,9 +2,10 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.service.User.UserService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -13,17 +14,15 @@ import java.util.Set;
 /**
  * класс - контроллер для управления данными о User
  */
-
 @RestController
 @ResponseBody
 @Slf4j
 @RequestMapping("/users")
-
 public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(@Qualifier(value = "userDbService") UserService userService) {
         this.userService = userService;
     }
 
@@ -40,7 +39,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public User findUserById(@PathVariable("id") String id) {
-        return userService.findUserById(Integer.parseInt(id));
+        return userService.findUserById(Long.parseLong(id));
     }
 
     /**
@@ -80,7 +79,7 @@ public class UserController {
      */
     @GetMapping("/{id}/friends")
     public Set<User> findUserFriends(@PathVariable("id") String id) {
-            return userService.findUserFriends(Integer.parseInt(id));
+        return userService.findUserFriends(Long.parseLong((id)));
     }
 
     /**
