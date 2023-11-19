@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.exception.ArgNotPositiveException;
@@ -14,13 +13,9 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.Film.FilmDbService;
-import ru.yandex.practicum.filmorate.service.Film.FilmService;
 import ru.yandex.practicum.filmorate.service.User.UserDbService;
-import ru.yandex.practicum.filmorate.service.User.UserService;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -34,37 +29,17 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@JdbcTest // указываем, о необходимости подготовить бины для работы с БД
+@JdbcTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-
 public class FilmControllerTest {
-
     private final JdbcTemplate jdbcTemplate;
-//    private final FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
-  //  private final UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
     private Validator validator;          //создаем валидатор параметров Film
-
-/*
-    private  FilmStorage filmStorage = new FilmDbStorage(jdbcTemplate);
-    private final UserStorage userStorage = new UserDbStorage(jdbcTemplate);
-    private FilmService filmService = new FilmDbService(filmStorage, userStorage, jdbcTemplate);
-    private final FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-    private final UserService userService = new UserDbService(userStorage, jdbcTemplate);
-    private final UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-    private Validator validator;          //создаем валидатор параметров Film
-
-    @Autowired
-    public FilmControllerTest(JdbcTemplate jdbcTemplate, @Qualifier(value = "filmDbService") FilmService filmService) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.filmService = filmService;
-   } */
 
     @BeforeEach
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-     //   filmService.getFilms().clear();
+        //   filmService.getFilms().clear();
     }
 
     @Test
@@ -79,11 +54,8 @@ public class FilmControllerTest {
                 "Застенчивый и меланхоличный Джоэл",
                 LocalDate.of(2004, 3, 9),
                 108, null, new Mpa(2, "PG"));
-
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
         //when
         filmController.createFilm(film1);
         filmController.createFilm(film2);
@@ -99,12 +71,11 @@ public class FilmControllerTest {
     @Test
     void shouldFindFilmById() {
         //given
-        Film film1 = new Film("Interstellar","About the theory of relativity",
+        Film film1 = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(2014, 10, 26),
                 169, null, new Mpa(1, "G"));
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
         //when
         filmController.createFilm(film1);
         film1.setId(1);
@@ -124,12 +95,11 @@ public class FilmControllerTest {
     @Test
     void shouldNotFindFilmByIdIfIdNotExist() {
         //given
-        Film film1 = new Film("Interstellar","About the theory of relativity",
+        Film film1 = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(2014, 10, 26),
                 169, null, new Mpa(1, "G"));
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
         //when
         filmController.createFilm(film1);
         film1.setId(1);
@@ -144,15 +114,14 @@ public class FilmControllerTest {
     @Test
     void shouldCreateFilmIfParametersCorrect() {
         // given
-        Film film = new Film("Interstellar","About the theory of relativity",
+        Film film = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(2014, 10, 26),
                 169, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта film");
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
         // when
         Film result = filmController.createFilm(film);
         // then
@@ -167,15 +136,14 @@ public class FilmControllerTest {
     @Test
     void shouldNotCreateFilmIfNameIsBlank() {
         // given
-        Film film = new Film("Interstellar","About the theory of relativity",
+        Film film = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(2014, 10, 26),
                 169, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта film");
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             Film result = filmController.createFilm(film);
@@ -184,7 +152,8 @@ public class FilmControllerTest {
                     () -> assertEquals(film.getName(), result.getName(), "Названия не совпадают"),
                     () -> assertEquals(film.getDescription(), result.getDescription(), "Описания не совпадают"),
                     () -> assertEquals(film.getReleaseDate(), result.getReleaseDate(), "Даты не совпадают"),
-                    () -> assertEquals(film.getDuration(), result.getDuration(), "Продолжительности не совпадают")
+                    () -> assertEquals(film.getDuration(), result.getDuration(),
+                            "Продолжительности не совпадают")
             );
         }
     }
@@ -202,9 +171,8 @@ public class FilmControllerTest {
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта film");
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             Film result = filmController.createFilm(film);
@@ -213,7 +181,8 @@ public class FilmControllerTest {
                     () -> assertEquals(film.getName(), result.getName(), "Названия не совпадают"),
                     () -> assertEquals(film.getDescription(), result.getDescription(), "Описания не совпадают"),
                     () -> assertEquals(film.getReleaseDate(), result.getReleaseDate(), "Даты не совпадают"),
-                    () -> assertEquals(film.getDuration(), result.getDuration(), "Продолжительности не совпадают")
+                    () -> assertEquals(film.getDuration(), result.getDuration(),
+                            "Продолжительности не совпадают")
             );
         }
     }
@@ -221,15 +190,14 @@ public class FilmControllerTest {
     @Test
     void shouldNotCreateFilmReleaseDateIsEarlierThan1895_12_28() {
         // given
-        Film film = new Film("Interstellar","About the theory of relativity",
+        Film film = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
                 169, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта film");
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             final ValidationException exception = assertThrows(
@@ -243,15 +211,14 @@ public class FilmControllerTest {
     @Test
     void shouldNotCreateFilmIfDurationIsZeroOrNegative() {
         // given
-        Film film = new Film("Interstellar","About the theory of relativity",
+        Film film = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
                 0, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта film");
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             Film result = filmController.createFilm(film);
@@ -260,7 +227,8 @@ public class FilmControllerTest {
                     () -> assertEquals(film.getName(), result.getName(), "Названия не совпадают"),
                     () -> assertEquals(film.getDescription(), result.getDescription(), "Описания не совпадают"),
                     () -> assertEquals(film.getReleaseDate(), result.getReleaseDate(), "Даты не совпадают"),
-                    () -> assertEquals(film.getDuration(), result.getDuration(), "Продолжительности не совпадают")
+                    () -> assertEquals(film.getDuration(), result.getDuration(),
+                            "Продолжительности не совпадают")
             );
         }
     }
@@ -268,15 +236,14 @@ public class FilmControllerTest {
     @Test
     void shouldUpdateFilmIfIdIsInTheList() {
         // given
-        Film film = new Film("Interstellar","About the theory of relativity",
+        Film film = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
                 0, null, new Mpa(1, "G"));
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта film");
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
         // when
         if (violations.isEmpty()) {
             film.setId(1);
@@ -289,7 +256,8 @@ public class FilmControllerTest {
                     () -> assertEquals(film.getName(), result.getName(), "Названия не совпадают"),
                     () -> assertEquals(film.getDescription(), result.getDescription(), "Описания не совпадают"),
                     () -> assertEquals(film.getReleaseDate(), result.getReleaseDate(), "Даты не совпадают"),
-                    () -> assertEquals(film.getDuration(), result.getDuration(), "Продолжительности не совпадают")
+                    () -> assertEquals(film.getDuration(), result.getDuration(),
+                            "Продолжительности не совпадают")
             );
         }
     }
@@ -297,16 +265,17 @@ public class FilmControllerTest {
     @Test
     void shouldAddNewLikeToFilm() {
         //given
-        Film film1 = new Film("Interstellar","About the theory of relativity",
+        Film film1 = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
                 0, null, new Mpa(1, "G"));
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         userController.createUser(user2);
@@ -325,16 +294,17 @@ public class FilmControllerTest {
     @Test
     void shouldNotAddNewLikeToFilmIfIdNotExist() {
         //given
-        Film film1 = new Film("Interstellar","About the theory of relativity",
+        Film film1 = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
                 0, null, new Mpa(1, "G"));
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         userController.createUser(user2);
@@ -353,16 +323,17 @@ public class FilmControllerTest {
     @Test
     void shouldDeleteLikeFromFilm() {
         //given
-        Film film1 = new Film("Interstellar","About the theory of relativity",
+        Film film1 = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
                 0, null, new Mpa(1, "G"));
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         userController.createUser(user2);
@@ -381,16 +352,17 @@ public class FilmControllerTest {
     @Test
     void shouldNotDeleteLikeFromFilmIfIdNotExist() {
         //given
-        Film film1 = new Film("Interstellar","About the theory of relativity",
+        Film film1 = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
                 0, null, new Mpa(1, "G"));
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         userController.createUser(user2);
@@ -410,20 +382,21 @@ public class FilmControllerTest {
     @Test
     void shouldFindPopularFilms() {
         //given
-        Film film1 = new Film("Interstellar","About the theory of relativity",
+        Film film1 = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
                 0, null, new Mpa(1, "G"));
         Film film2 = new Film("Eternal Sunshine of the Spotless Mind",
                 "Застенчивый и меланхоличный Джоэл",
                 LocalDate.of(2004, 3, 9),
                 108, null, new Mpa(2, "PG"));
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         userController.createUser(user2);
@@ -446,20 +419,21 @@ public class FilmControllerTest {
     @Test
     void shouldNotFindPopularFilmsIfCountIsLessOne() {
         //given
-        Film film1 = new Film("Interstellar","About the theory of relativity",
+        Film film1 = new Film("Interstellar", "About the theory of relativity",
                 LocalDate.of(1894, 10, 26),
                 0, null, new Mpa(1, "G"));
         Film film2 = new Film("Eternal Sunshine of the Spotless Mind",
                 "Застенчивый и меланхоличный Джоэл",
                 LocalDate.of(2004, 3, 9),
                 108, null, new Mpa(2, "PG"));
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate), new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate), jdbcTemplate));
-
+        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
+                new UserDbStorage(jdbcTemplate), jdbcTemplate));
+        UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
+                jdbcTemplate));
         //when
         userController.createUser(user1);
         userController.createUser(user2);

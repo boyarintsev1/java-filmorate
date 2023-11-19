@@ -4,17 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.exception.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.User.UserDbService;
-import ru.yandex.practicum.filmorate.service.User.UserService;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -30,20 +26,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserControllerTest {
     private final JdbcTemplate jdbcTemplate;
     private Validator validator;          //создаем валидатор параметров User
-
-
-
-    /*private final UserStorage userStorage = new UserDbStorage(jdbcTemplate);
-    private  UserService userService = new UserDbService(userStorage, jdbcTemplate);
-
-
-
-
-    @Autowired
-    public UserControllerTest (JdbcTemplate jdbcTemplate, @Qualifier(value = "userDbService") UserService userService) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.userService = userService;
-    } */
 
     @BeforeEach
     public void setUp() {
@@ -256,7 +238,6 @@ class UserControllerTest {
         //given
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
-
         User user2 = new User("Robocop", "Billy","email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
         UserController userController = new UserController(new UserDbService
@@ -283,7 +264,6 @@ class UserControllerTest {
         //given
         User user1 = new User("dolore", "Nick Name","mail@mail.ru",
                 LocalDate.of(1946, 8, 20),null);
-
         User user2 = new User("Robocop", "Billy","email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
         UserController userController = new UserController(new UserDbService
@@ -443,7 +423,8 @@ class UserControllerTest {
         Set<User> result1 = new TreeSet<>(Comparator.comparingLong(User::getId));
         result1.add(user3);
         assertNotNull(userController.findCommonFriends("1", "2"), "Список друзей равен null");
-        assertIterableEquals(userController.findCommonFriends("1", "2"), result1, "Списки друзей не равны!");
+        assertIterableEquals(userController.findCommonFriends("1", "2"), result1,
+                "Списки друзей не равны!");
     }
 
     @Test
