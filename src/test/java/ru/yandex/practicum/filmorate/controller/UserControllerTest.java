@@ -31,16 +31,24 @@ class UserControllerTest {
     public void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-       // userService.getUsers().clear();
+        jdbcTemplate.update("delete from FILMS");
+        jdbcTemplate.update("DROP sequence if exists films_seq");
+        jdbcTemplate.update("CREATE sequence if not exists films_seq START WITH 1 minvalue 1 INCREMENT BY 1");
+        jdbcTemplate.update("delete from USERS");
+        jdbcTemplate.update("DROP sequence if exists users_seq");
+        jdbcTemplate.update("CREATE sequence if not exists users_seq START WITH 1 minvalue 1 INCREMENT BY 1;");
+        jdbcTemplate.update("delete from LIKES");
+        jdbcTemplate.update("delete from FILMS_GENRES");
+        jdbcTemplate.update("delete from FRIENDSHIP");
     }
 
     @Test
     void shouldFindAllUsers() {
         //given
         final List<User> result = new ArrayList<>();
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
@@ -51,18 +59,15 @@ class UserControllerTest {
         user2.setId(2L);
         result.add(user1);
         result.add(user2);
-        System.out.println("1=" + userController.findAllUsers());
-        System.out.println("2=" + result);
         assertNotNull(userController.findAllUsers(), "Список пользователей равен null");
-        assertIterableEquals(userController.findAllUsers(), result,
-                "Списки пользователей не совпадают");
+        assertIterableEquals(userController.findAllUsers(), result, "Списки пользователей не совпадают");
     }
 
     @Test
     void shouldFindUserById() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
         //when
@@ -83,8 +88,8 @@ class UserControllerTest {
     @Test
     void shouldNotFindUserByIdIfIdNotExist() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
         //when
@@ -100,8 +105,8 @@ class UserControllerTest {
     @Test
     void shouldCreateUserIfParametersCorrect() {
         // given
-        User user = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
+        User user = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
@@ -121,8 +126,8 @@ class UserControllerTest {
     @Test
     void shouldNotCreateUserIfLoginIsBlank() {
         // given
-        User user = new User("", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
+        User user = new User("", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта user");
@@ -144,8 +149,8 @@ class UserControllerTest {
     @Test
     void shouldNotCreateUserIfLoginHasSpaces() {
         // given
-        User user = new User("dol ore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
+        User user = new User("dol ore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
@@ -164,8 +169,8 @@ class UserControllerTest {
     @Test
     void shouldCreateUserIfNameIsBlank() {
         // given
-        User user = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
+        User user = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
         user.setName("");
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
@@ -188,8 +193,8 @@ class UserControllerTest {
     @Test
     void shouldNotCreateUserIfBirthdayIsInFutureOrNow() {
         // given
-        User user = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(2046, 8, 20),null);
+        User user = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(2046, 8, 20), null);
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertFalse(violations.isEmpty(), "Ошибка валидации параметров объекта user");
@@ -211,8 +216,8 @@ class UserControllerTest {
     @Test
     void shouldUpdateUserIfIdIsInTheList() {
         // given
-        User user = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
+        User user = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         System.out.println("violations = " + violations);
         assertTrue(violations.isEmpty(), "Ошибка валидации параметров объекта user");
@@ -236,35 +241,39 @@ class UserControllerTest {
     @Test
     void shouldAddNewFriendToUser() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
         //when
         userController.createUser(user1);
-        user1.setId(1L);
         userController.createUser(user2);
+        user1.setId(1L);
         user2.setId(2L);
+        Set<Long> friends = new HashSet<>();
         // then
         userController.addNewFriend("1", "2");
-        Set<Integer> result1 = new HashSet<>();
-        result1.add(2);
-        Set<Integer> result2 = new HashSet<>();
-        result2.add(1);
-        assertNotNull(user1.getFriends(), "Список друзей равен null");
-        assertNotNull(user2.getFriends(), "Список друзей равен null");
-        assertIterableEquals(user1.getFriends(), result1, "Списки друзей не равны!");
-        assertIterableEquals(user2.getFriends(), result2, "Списки друзей не равны!");
+        friends.add(2L);
+        user1.setFriends(friends);
+        Set<User> result1 = new HashSet<>();
+        result1.add(user2);
+        Set<User> result2 = new HashSet<>();
+        assertNotNull(userController.findUserFriends("1"), "Список друзей равен null");
+        assertNotNull(userController.findUserFriends("2"), "Список друзей равен null");
+        assertEquals(userController.findUserFriends("1"), result1, "Списки друзей не равны!");
+        assertEquals(userController.findUserFriends("2"), result2, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends("1"), result1, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends("2"), result2, "Списки друзей не равны!");
     }
 
     @Test
     void shouldNotAddNewFriendToUserIfIdNotExist() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
@@ -285,43 +294,54 @@ class UserControllerTest {
     @Test
     void shouldDeleteFriendFromUser() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        User user3 = new User("Batman2", "Felix","felix@yandex.com",
+        User user3 = new User("Batman2", "Felix", "felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
         //when
         userController.createUser(user1);
-        user1.setId(1L);
         userController.createUser(user2);
-        user2.setId(2L);
         userController.createUser(user3);
+        user1.setId(1L);
+        user2.setId(2L);
         user3.setId(3L);
         userController.addNewFriend("1", "2");
         userController.addNewFriend("1", "3");
         userController.addNewFriend("2", "3");
+        userController.addNewFriend("3", "1");
+        Set<Long> friends1 = new HashSet<>();
+        Set<Long> friends2 = new HashSet<>();
         // then
         userController.deleteFriend("1", "2");
-        Set<Integer> result1 = new HashSet<>();
-        result1.add(3);
-        Set<Integer> result2 = new HashSet<>();
-        result2.add(3);
-        assertNotNull(user1.getFriends(), "Список друзей равен null");
-        assertNotNull(user2.getFriends(), "Список друзей равен null");
-        assertNotNull(user3.getFriends(), "Список друзей равен null");
-        assertIterableEquals(user1.getFriends(), result1, "Списки друзей не равны!");
-        assertIterableEquals(user2.getFriends(), result2, "Списки друзей не равны!");
+        userController.deleteFriend("3", "1");
+        friends1.add(3L);
+        friends2.add(3L);
+        user1.setFriends(friends1);
+        user2.setFriends(friends2);
+        Set<User> result1 = new HashSet<>();
+        result1.add(user3);
+        Set<User> result2 = new HashSet<>();
+        assertNotNull(userController.findUserFriends("1"), "Список друзей равен null");
+        assertNotNull(userController.findUserFriends("2"), "Список друзей равен null");
+        assertNotNull(userController.findUserFriends("3"), "Список друзей равен null");
+        assertEquals(userController.findUserFriends("1"), result1, "Списки друзей не равны!");
+        assertEquals(userController.findUserFriends("2"), result1, "Списки друзей не равны!");
+        assertEquals(userController.findUserFriends("3"), result2, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends("1"), result1, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends("2"), result1, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends("3"), result2, "Списки друзей не равны!");
     }
 
     @Test
     void shouldNotDeleteFriendFromUserIfIdNotExist() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
@@ -341,11 +361,11 @@ class UserControllerTest {
     @Test
     void shouldFindUserFriends() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        User user3 = new User("Batman2", "Felix","felix@yandex.com",
+        User user3 = new User("Batman2", "Felix", "felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
@@ -370,11 +390,11 @@ class UserControllerTest {
     @Test
     void shouldNotFindUserFriendsIfIdNotCorrect() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        User user3 = new User("Batman2", "Felix","felix@yandex.com",
+        User user3 = new User("Batman2", "Felix", "felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
@@ -400,11 +420,11 @@ class UserControllerTest {
     @Test
     void shouldFindCommonFriends() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        User user3 = new User("Batman2", "Felix","felix@yandex.com",
+        User user3 = new User("Batman2", "Felix", "felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
@@ -430,11 +450,11 @@ class UserControllerTest {
     @Test
     void shouldNotFindCommonFriendsIfIdNotCorrect() {
         //given
-        User user1 = new User("dolore", "Nick Name","mail@mail.ru",
-                LocalDate.of(1946, 8, 20),null);
-        User user2 = new User("Robocop", "Billy","email@yandex.com",
+        User user1 = new User("dolore", "Nick Name", "mail@mail.ru",
+                LocalDate.of(1946, 8, 20), null);
+        User user2 = new User("Robocop", "Billy", "email@yandex.com",
                 LocalDate.of(2012, 4, 3), null);
-        User user3 = new User("Batman2", "Felix","felix@yandex.com",
+        User user3 = new User("Batman2", "Felix", "felix@yandex.com",
                 LocalDate.of(1999, 7, 7), null);
         UserController userController = new UserController(new UserDbService(new UserDbStorage(jdbcTemplate),
                 jdbcTemplate));
