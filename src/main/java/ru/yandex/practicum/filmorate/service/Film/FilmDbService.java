@@ -8,13 +8,10 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ArgNotPositiveException;
 import ru.yandex.practicum.filmorate.exception.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.*;
-
 
 /**
  * класс для работы с данными о Film в БД H2
@@ -41,28 +38,43 @@ public class FilmDbService implements FilmService {
         return filmStorage.getFilms();
     }
 
+    /**
+     * метод получения данных о всех фильмах
+     */
     @Override
-    public Collection<Film> findAllFilms() {                           // получение всех фильмов
+    public Collection<Film> findAllFilms() {
         return filmStorage.findAllFilms();
     }
 
+    /**
+     * метод получения данных о фильме по его ID
+     */
     @Override
-    public Film findFilmById(long id) {                                // получение фильма по Id
+    public Film findFilmById(long id) {
         return filmStorage.findFilmById(id);
     }
 
+    /**
+     * метод создания нового фильма
+     */
     @Override
-    public Film createFilm(Film film) {                                   //создание нового фильма
+    public Film createFilm(Film film) {
         return filmStorage.createFilm(film);
     }
 
+    /**
+     * метод обновления данных о фильме
+     */
     @Override
-    public Film updateFilm(Film film) {                                   //обновление данных о фильме
+    public Film updateFilm(Film film) {
         return filmStorage.updateFilm(film);
     }
 
+    /**
+     * метод добавления лайка пользователя к фильму
+     */
     @Override
-    public Film addNewLike(long id, long userId) {  // метод добавления лайка фильму
+    public Film addNewLike(long id, long userId) {
         String s = "select count(*) from FILMS where id = '" + id + "'";
         if ((jdbcTemplate.queryForObject(s, Integer.class) == 0) ||
                 (jdbcTemplate.queryForObject(s, Integer.class) == null)) {
@@ -83,8 +95,11 @@ public class FilmDbService implements FilmService {
         return findFilmById(id);
     }
 
+    /**
+     * метод удаления лайка пользователя из фильма
+     */
     @Override
-    public Film deleteLike(long id, long userId) {                       // метод удаления лайка у фильма
+    public Film deleteLike(long id, long userId) {
         String s = "select count(*) from FILMS where id = '" + id + "'";
         if ((jdbcTemplate.queryForObject(s, Integer.class) == 0) ||
                 (jdbcTemplate.queryForObject(s, Integer.class) == null)) {
@@ -105,8 +120,11 @@ public class FilmDbService implements FilmService {
         return findFilmById(id);
     }
 
+    /**
+     * метод получения списка самых популярных фильмов с наибольшим количеством лайков
+     */
     @Override
-    public List<Film> findPopularFilms(int count) {              // метод получения фильмов по количеству лайков
+    public List<Film> findPopularFilms(int count) {
         System.out.println("count =" + count);
         if (count < 1) {
             throw new ArgNotPositiveException("count");
@@ -120,24 +138,5 @@ public class FilmDbService implements FilmService {
         log.info("Выводится список " + count + " популярных фильмов: {}", popularFilmsList);
         return popularFilmsList.subList(0, count);
     }
-
-    @Override
-    public List<Genre> findAllGenres() {                           // получение названий всех жанров
-        return filmStorage.findAllGenres();
-    }
-
-    @Override
-    public Genre findGenreById(int id) {                          // получение жанра по ID
-        return filmStorage.findGenreById(id);
-    }
-
-    @Override
-    public List<Mpa> findAllMpaRatings() {                           // получение названий всех рейтингов МРА
-        return filmStorage.findAllMpaRatings();
-    }
-
-    @Override
-    public Mpa findMpaRatingById(int id) {                          // получение жанра по ID
-        return filmStorage.findMpaRatingById(id);
-    }
 }
+

@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.service.Film;
 
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.Collection;
 import java.util.List;
@@ -49,25 +47,4 @@ public interface FilmService {
      * метод получения списка самых популярных фильмов с наибольшим количеством лайков
      */
     List<Film> findPopularFilms(int count);
-
-    /**
-     * метод получения списка всех возможных жанров фильмов
-     */
-    List<Genre> findAllGenres();
-
-    /**
-     * метод получения названия жанра по его ID
-     */
-    Genre findGenreById(int id);
-
-    /**
-     * метод получения списка всех возможных рейтингов МРА
-     */
-    List<Mpa> findAllMpaRatings();
-
-    /**
-     * метод получения рейтинга МРА по ID
-     */
-    Mpa findMpaRatingById(int id);
-
 }

@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class UserControllerTest {
     private final JdbcTemplate jdbcTemplate;
-    private Validator validator;          //создаем валидатор параметров User
+    private Validator validator;
 
     @BeforeEach
     public void setUp() {
@@ -73,7 +73,7 @@ class UserControllerTest {
         //when
         userController.createUser(user1);
         user1.setId(1L);
-        String id = "1";
+        Long id = 1L;
         User result = userController.findUserById(id);
         // then
         assertNotNull(result, "Пользователя с таким id нет");
@@ -94,7 +94,7 @@ class UserControllerTest {
                 jdbcTemplate));
         //when
         userController.createUser(user1);
-        String id = "5";
+        Long id = 5L;
         final IncorrectIdException exception = assertThrows(
                 IncorrectIdException.class,
                 () -> {
@@ -254,18 +254,18 @@ class UserControllerTest {
         user2.setId(2L);
         Set<Long> friends = new HashSet<>();
         // then
-        userController.addNewFriend("1", "2");
+        userController.addNewFriend(1L, 2L);
         friends.add(2L);
         user1.setFriends(friends);
         Set<User> result1 = new HashSet<>();
         result1.add(user2);
         Set<User> result2 = new HashSet<>();
-        assertNotNull(userController.findUserFriends("1"), "Список друзей равен null");
-        assertNotNull(userController.findUserFriends("2"), "Список друзей равен null");
-        assertEquals(userController.findUserFriends("1"), result1, "Списки друзей не равны!");
-        assertEquals(userController.findUserFriends("2"), result2, "Списки друзей не равны!");
-        assertIterableEquals(userController.findUserFriends("1"), result1, "Списки друзей не равны!");
-        assertIterableEquals(userController.findUserFriends("2"), result2, "Списки друзей не равны!");
+        assertNotNull(userController.findUserFriends(1L), "Список друзей равен null");
+        assertNotNull(userController.findUserFriends(2L), "Список друзей равен null");
+        assertEquals(userController.findUserFriends(1L), result1, "Списки друзей не равны!");
+        assertEquals(userController.findUserFriends(2L), result2, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends(1L), result1, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends(2L), result2, "Списки друзей не равны!");
     }
 
     @Test
@@ -285,10 +285,10 @@ class UserControllerTest {
         // then
         assertThrows(
                 IncorrectIdException.class,
-                () -> userController.addNewFriend("1", "3"));
+                () -> userController.addNewFriend(1L, 3L));
         assertThrows(
                 IncorrectIdException.class,
-                () -> userController.addNewFriend("4", "2"));
+                () -> userController.addNewFriend(4L, 2L));
     }
 
     @Test
@@ -309,15 +309,15 @@ class UserControllerTest {
         user1.setId(1L);
         user2.setId(2L);
         user3.setId(3L);
-        userController.addNewFriend("1", "2");
-        userController.addNewFriend("1", "3");
-        userController.addNewFriend("2", "3");
-        userController.addNewFriend("3", "1");
+        userController.addNewFriend(1L, 2L);
+        userController.addNewFriend(1L, 3L);
+        userController.addNewFriend(2L, 3L);
+        userController.addNewFriend(3L, 1L);
         Set<Long> friends1 = new HashSet<>();
         Set<Long> friends2 = new HashSet<>();
         // then
-        userController.deleteFriend("1", "2");
-        userController.deleteFriend("3", "1");
+        userController.deleteFriend(1L, 2L);
+        userController.deleteFriend(3L, 1L);
         friends1.add(3L);
         friends2.add(3L);
         user1.setFriends(friends1);
@@ -325,15 +325,15 @@ class UserControllerTest {
         Set<User> result1 = new HashSet<>();
         result1.add(user3);
         Set<User> result2 = new HashSet<>();
-        assertNotNull(userController.findUserFriends("1"), "Список друзей равен null");
-        assertNotNull(userController.findUserFriends("2"), "Список друзей равен null");
-        assertNotNull(userController.findUserFriends("3"), "Список друзей равен null");
-        assertEquals(userController.findUserFriends("1"), result1, "Списки друзей не равны!");
-        assertEquals(userController.findUserFriends("2"), result1, "Списки друзей не равны!");
-        assertEquals(userController.findUserFriends("3"), result2, "Списки друзей не равны!");
-        assertIterableEquals(userController.findUserFriends("1"), result1, "Списки друзей не равны!");
-        assertIterableEquals(userController.findUserFriends("2"), result1, "Списки друзей не равны!");
-        assertIterableEquals(userController.findUserFriends("3"), result2, "Списки друзей не равны!");
+        assertNotNull(userController.findUserFriends(1L), "Список друзей равен null");
+        assertNotNull(userController.findUserFriends(2L), "Список друзей равен null");
+        assertNotNull(userController.findUserFriends(3L), "Список друзей равен null");
+        assertEquals(userController.findUserFriends(1L), result1, "Списки друзей не равны!");
+        assertEquals(userController.findUserFriends(2L), result1, "Списки друзей не равны!");
+        assertEquals(userController.findUserFriends(3L), result2, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends(1L), result1, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends(2L), result1, "Списки друзей не равны!");
+        assertIterableEquals(userController.findUserFriends(3L), result2, "Списки друзей не равны!");
     }
 
     @Test
@@ -350,12 +350,12 @@ class UserControllerTest {
         user1.setId(1L);
         userController.createUser(user2);
         user2.setId(2L);
-        userController.addNewFriend("1", "2");
+        userController.addNewFriend(1L, 2L);
         // then
         assertThrows(IncorrectIdException.class,
-                () -> userController.deleteFriend("1", "3"));
+                () -> userController.deleteFriend(1L, 3L));
         assertThrows(IncorrectIdException.class,
-                () -> userController.addNewFriend("4", "2"));
+                () -> userController.addNewFriend(4L, 2L));
     }
 
     @Test
@@ -376,15 +376,15 @@ class UserControllerTest {
         user2.setId(2L);
         userController.createUser(user3);
         user3.setId(3L);
-        userController.addNewFriend("1", "2");
-        userController.addNewFriend("1", "3");
-        userController.addNewFriend("2", "3");
+        userController.addNewFriend(1L, 2L);
+        userController.addNewFriend(1L, 3L);
+        userController.addNewFriend(2L, 3L);
         // then
         Set<User> result1 = new TreeSet<>(Comparator.comparingLong(User::getId));
         result1.add(user2);
         result1.add(user3);
-        assertNotNull(userController.findUserFriends("1"), "Список друзей равен null");
-        assertIterableEquals(userController.findUserFriends("1"), result1, "Списки друзей не равны!");
+        assertNotNull(userController.findUserFriends(1L), "Список друзей равен null");
+        assertIterableEquals(userController.findUserFriends(1L), result1, "Списки друзей не равны!");
     }
 
     @Test
@@ -405,16 +405,16 @@ class UserControllerTest {
         user2.setId(2L);
         userController.createUser(user3);
         user3.setId(3L);
-        userController.addNewFriend("1", "2");
-        userController.addNewFriend("1", "3");
-        userController.addNewFriend("2", "3");
+        userController.addNewFriend(1L, 2L);
+        userController.addNewFriend(1L, 3L);
+        userController.addNewFriend(2L, 3L);
         // then
         assertThrows(
                 IncorrectIdException.class,
-                () -> userController.findUserFriends("4"));
+                () -> userController.findUserFriends(4L));
         assertThrows(
                 IncorrectIdException.class,
-                () -> userController.findUserFriends("-2"));
+                () -> userController.findUserFriends(-2L));
     }
 
     @Test
@@ -435,15 +435,15 @@ class UserControllerTest {
         user2.setId(2L);
         userController.createUser(user3);
         user3.setId(3L);
-        userController.addNewFriend("1", "2");
-        userController.addNewFriend("1", "3");
-        userController.addNewFriend("2", "3");
+        userController.addNewFriend(1L, 2L);
+        userController.addNewFriend(1L, 3L);
+        userController.addNewFriend(2L, 3L);
         // then
-        userController.findCommonFriends("1", "2");
+        userController.findCommonFriends(1L, 2L);
         Set<User> result1 = new TreeSet<>(Comparator.comparingLong(User::getId));
         result1.add(user3);
-        assertNotNull(userController.findCommonFriends("1", "2"), "Список друзей равен null");
-        assertIterableEquals(userController.findCommonFriends("1", "2"), result1,
+        assertNotNull(userController.findCommonFriends(1L, 2L), "Список друзей равен null");
+        assertIterableEquals(userController.findCommonFriends(1L, 2L), result1,
                 "Списки друзей не равны!");
     }
 
@@ -465,16 +465,16 @@ class UserControllerTest {
         user2.setId(2L);
         userController.createUser(user3);
         user3.setId(3L);
-        userController.addNewFriend("1", "2");
-        userController.addNewFriend("1", "3");
-        userController.addNewFriend("2", "3");
+        userController.addNewFriend(1L, 2L);
+        userController.addNewFriend(1L, 3L);
+        userController.addNewFriend(2L, 3L);
         // then
         assertThrows(
                 IncorrectIdException.class,
-                () -> userController.findCommonFriends("4", "2"));
+                () -> userController.findCommonFriends(4L, 2L));
         assertThrows(
                 IncorrectIdException.class,
-                () -> userController.findCommonFriends("1", "-2"));
+                () -> userController.findCommonFriends(1L, -2L));
     }
 
     @Test

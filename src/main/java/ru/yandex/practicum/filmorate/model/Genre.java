@@ -15,7 +15,7 @@ public class Genre {
     @NotEmpty
     @NotBlank
     private final String name;
-    public static final String[] genres_names = {"Комедия", "Драма", "Мультфильм", "Триллер",
+    public static final String[] GENRES_NAMES = {"Комедия", "Драма", "Мультфильм", "Триллер",
             "Документальный", "Боевик"};
 
     public Genre(long id, String name) {

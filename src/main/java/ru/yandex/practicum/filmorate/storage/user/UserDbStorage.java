@@ -36,11 +36,17 @@ public class UserDbStorage implements UserStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * метод получения данных о всех пользователях в виде HashMap
+     */
     @Override
     public Map<Long, User> getUsers() {
         return null;
     }
 
+    /**
+     * метод получения списка всех пользователей
+     */
     @Override
     public List<User> findAllUsers() {
         try {
@@ -58,6 +64,9 @@ public class UserDbStorage implements UserStorage {
         }
     }
 
+    /**
+     * метод получения данных о пользователе по его ID
+     */
     @Override
     public User findUserById(long id) {
         String s = "select count(*) from USERS where id = '" + id + "'";
@@ -65,7 +74,6 @@ public class UserDbStorage implements UserStorage {
                 (jdbcTemplate.queryForObject(s, Integer.class) == null)) {
             throw new IncorrectIdException("userNotExists");
         }
-
         try {
             String sql = SELECT_USER_BY_ID_QUERY + id;
             return jdbcTemplate.queryForObject(sql,
@@ -82,6 +90,9 @@ public class UserDbStorage implements UserStorage {
         }
     }
 
+    /**
+     * метод создания нового пользователя
+     */
     @Override
     public User createUser(@Valid @RequestBody User user) {
         if (containsSpace(user.getLogin())) {
@@ -110,6 +121,9 @@ public class UserDbStorage implements UserStorage {
         }
     }
 
+    /**
+     * метод обновления данных о пользователе
+     */
     @Override
     public User updateUser(@Valid @RequestBody User user) {
         if (containsSpace(user.getLogin())) {
@@ -141,6 +155,9 @@ public class UserDbStorage implements UserStorage {
         }
     }
 
+    /**
+     * метод получения данных о друзьях пользователя по его ID
+     */
     public Set<Long> findFriendsByUserId(Long id) {
         try {
             String sql = SELECT_FRIENDS_BY_USER_ID_QUERY + id;
@@ -152,7 +169,10 @@ public class UserDbStorage implements UserStorage {
         }
     }
 
-    public boolean containsSpace(String input) {    //метод определения наличия пробелов в поле класса
+    /**
+     * метод определения наличия пробелов в поле класса
+     */
+    public boolean containsSpace(String input) {
         if (!input.isEmpty()) {
             for (int i = 0; i < input.length(); i++) {
                 if (Character.isWhitespace(input.charAt(i)) || Character.isSpaceChar(input.charAt(i))) {
@@ -163,6 +183,9 @@ public class UserDbStorage implements UserStorage {
         return false;
     }
 
+    /**
+     * метод удаления из FRIENDSHIP данных о друзьях пользователя по его ID
+     */
     public boolean deleteFromFRIENDSHIP(long id) {
         return jdbcTemplate.update(DELETE_FROM_FRIENDSHIP, id) > 0;
     }

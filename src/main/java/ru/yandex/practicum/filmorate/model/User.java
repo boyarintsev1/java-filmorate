@@ -35,7 +35,7 @@ public class User {
 
     @JsonCreator
     public User(String login, String name, String email,
-                LocalDate birthday, Set<Long> friends) {  //, Set<Long> unconfirmedFriends
+                LocalDate birthday, Set<Long> friends) {
         this.name = name;
         this.login = login;
         this.email = email;

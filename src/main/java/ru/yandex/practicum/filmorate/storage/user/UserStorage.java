@@ -10,6 +10,11 @@ import java.util.Map;
  */
 public interface UserStorage {
     /**
+     * метод получения данных о всех пользователях в виде HashMap
+     */
+    Map<Long, User> getUsers();
+
+    /**
      * метод получения списка всех пользователей
      */
     List<User> findAllUsers();
@@ -28,9 +33,4 @@ public interface UserStorage {
      * метод обновления данных о пользователе
      */
     User updateUser(User user);
-
-    /**
-     * метод добавления пользователя в список друзей
-     */
-    Map<Long, User> getUsers();
 }

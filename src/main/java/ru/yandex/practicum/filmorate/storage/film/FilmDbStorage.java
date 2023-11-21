@@ -24,12 +24,8 @@ import java.util.*;
 public class FilmDbStorage implements FilmStorage {
     private final Logger log = LoggerFactory.getLogger(FilmDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
-
     private static final String SELECT_ALL_FILMS_QUERY = "select * from FILMS";
     private static final String SELECT_FILM_BY_ID_QUERY = "select * from FILMS where id =";
-    private static final String SELECT_ALL_GENRES = "select * from GENRES order by id";
-    private static final String SELECT_GENRE_BY_ID_QUERY = "select * from GENRES where id =";
-    private static final String SELECT_ALL_MPA_RATING_QUERY = "select * from MPA_RATING order by id";
     private static final String SELECT_MPA_RATING_BY_ID_QUERY = "select * from MPA_RATING where id =";
     private static final String SELECT_LIKES_BY_FILM_ID_QUERY = "select * from LIKES where filmId =";
     private static final String SELECT_GENRES_BY_FILM_ID_QUERY = "select f.genre_id, g.name from FILMS_GENRES AS f " +
@@ -47,11 +43,17 @@ public class FilmDbStorage implements FilmStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * метод получения данных о всех фильмах в виде HashMap
+     */
     @Override
     public Map<Long, Film> getFilms() {
         return null;
     }
 
+    /**
+     * метод получения данных о всех фильмах
+     */
     @Override
     public List<Film> findAllFilms() {
         try {
@@ -72,6 +74,9 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
+    /**
+     * метод получения данных о фильме по его ID
+     */
     @Override
     public Film findFilmById(long id) {
         String s = "select count(*) from FILMS where id = '" + id + "'";
@@ -98,6 +103,9 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
+    /**
+     * метод создания нового фильма
+     */
     @Override
     public Film createFilm(@Valid @RequestBody Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
@@ -128,6 +136,9 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
+    /**
+     * метод обновления данных о фильме
+     */
     @Override
     public Film updateFilm(@Valid @RequestBody Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
@@ -156,38 +167,9 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
-    @Override
-    public List<Genre> findAllGenres() {
-        try {
-            return jdbcTemplate.query(SELECT_ALL_GENRES, (rs, rowNum) ->
-                    new Genre(rs.getLong("id"), rs.getString("name")));
-        } catch (Exception e) {
-            throw new RuntimeException("Ошибка при загрузке жанров");
-        }
-    }
-
-    @Override
-    public Genre findGenreById(int id) {
-        try {
-            String sql = SELECT_GENRE_BY_ID_QUERY + id;
-            return jdbcTemplate.queryForObject(sql,
-                    (rs, rowNum) -> new Genre(rs.getLong("id"), rs.getString("name")));
-        } catch (Exception e) {
-            throw new IncorrectIdException("Genre_ID");
-        }
-    }
-
-    @Override
-    public List<Mpa> findAllMpaRatings() {
-        try {
-            return jdbcTemplate.query(SELECT_ALL_MPA_RATING_QUERY, (rs, rowNum) ->
-                    new Mpa(rs.getInt("id"), rs.getString("name")));
-        } catch (Exception e) {
-            throw new RuntimeException("Ошибка при загрузке рейтингов MPA");
-        }
-    }
-
-    @Override
+    /**
+     * метод получения данных о рейтинге MPA по его ID
+     */
     public Mpa findMpaRatingById(int id) {
         try {
             String sql = SELECT_MPA_RATING_BY_ID_QUERY + id;
@@ -198,6 +180,9 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
+    /**
+     * метод получения данных о лайках фильма по его ID
+     */
     public Set<Long> findLikesByFilmId(Long id) {
         try {
             String sql = SELECT_LIKES_BY_FILM_ID_QUERY + id;
@@ -207,6 +192,9 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
+    /**
+     * метод получения данных о жанре фильма по его ID
+     */
     public Set<Genre> findGenresByFilmId(Long id) {
         try {
             String sql = SELECT_GENRES_BY_FILM_ID_QUERY + id + " order by genre_id";
@@ -217,6 +205,9 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
+    /**
+     * метод удаления данных из FILMES_GENRES по ID фильма
+     */
     public boolean deleteFromFILMS_GENRES(long id) {
         return jdbcTemplate.update(DELETE_FROM_FILMS_GENRES, id) > 0;
     }

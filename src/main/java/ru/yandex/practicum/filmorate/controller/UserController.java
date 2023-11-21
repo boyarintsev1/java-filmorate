@@ -38,8 +38,8 @@ public class UserController {
      * метод получения данных о пользователе по его ID
      */
     @GetMapping("/{id}")
-    public User findUserById(@PathVariable("id") String id) {
-        return userService.findUserById(Long.parseLong(id));
+    public User findUserById(@PathVariable("id") Long id) {
+        return userService.findUserById(id);
     }
 
     /**
@@ -62,32 +62,32 @@ public class UserController {
      * метод добавления пользователя в список друзей
      */
     @PutMapping("/{id}/friends/{friendId}")
-    public User addNewFriend(@PathVariable("id") String id, @PathVariable("friendId") String friendId) {
-        return userService.addNewFriend(Integer.parseInt(id), Integer.parseInt(friendId));
+    public User addNewFriend(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId) {
+        return userService.addNewFriend(id, friendId);
     }
 
     /**
      * метод удаления пользователя из друзей
      */
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User deleteFriend(@PathVariable("id") String id, @PathVariable("friendId") String friendId) {
-        return userService.deleteFriend(Integer.parseInt(id), Integer.parseInt(friendId));
+    public User deleteFriend(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId) {
+        return userService.deleteFriend(id, friendId);
     }
 
     /**
      * метод получения списка друзей указанного пользователя
      */
     @GetMapping("/{id}/friends")
-    public Set<User> findUserFriends(@PathVariable("id") String id) {
-        return userService.findUserFriends(Long.parseLong((id)));
+    public Set<User> findUserFriends(@PathVariable("id") Long id) {
+        return userService.findUserFriends(id);
     }
 
     /**
      * метод получения списка общих друзей двух пользователей
      */
     @GetMapping("/{id}/friends/common/{otherId}")
-    public Set<User> findCommonFriends(@PathVariable("id") String id, @PathVariable("otherId") String otherId) {
-        return userService.findCommonFriends(Integer.parseInt(id), Integer.parseInt(otherId));
+    public Set<User> findCommonFriends(@PathVariable("id") Long id, @PathVariable("otherId") Long otherId) {
+        return userService.findCommonFriends(id, otherId);
     }
 }
 

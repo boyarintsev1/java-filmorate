@@ -8,12 +8,12 @@ import ru.yandex.practicum.filmorate.exception.IdExistsException;
 import ru.yandex.practicum.filmorate.exception.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * класс хранения и обработки данных о Film в памяти
@@ -25,16 +25,25 @@ public class InMemoryFilmStorage implements FilmStorage {
     final Map<Long, Film> films = new HashMap<>();
     int id = 0;
 
+    /**
+     * метод получения данных о всех фильмах в виде HashMap
+     */
     @Override
     public Map<Long, Film> getFilms() {
         return films;
     }
 
+    /**
+     * метод получения данных о всех фильмах
+     */
     @Override
     public Collection<Film> findAllFilms() {
         return films.values();
     }
 
+    /**
+     * метод получения данных о фильме по его ID
+     */
     @Override
     public Film findFilmById(@Valid @RequestBody long id) {
         if (!films.containsKey(id)) {
@@ -43,6 +52,9 @@ public class InMemoryFilmStorage implements FilmStorage {
         return films.get(id);
     }
 
+    /**
+     * метод создания нового фильма
+     */
     @Override
     public Film createFilm(@Valid @RequestBody Film film) {
         if (films.containsValue(film)) {
@@ -58,6 +70,9 @@ public class InMemoryFilmStorage implements FilmStorage {
         return film;
     }
 
+    /**
+     * метод обновления данных о фильме
+     */
     @Override
     public Film updateFilm(@Valid @RequestBody Film film) {
         if (!films.containsKey(film.getId())) {
@@ -70,41 +85,5 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new ValidationException("releaseDate");
         }
         return film;
-    }
-
-    @Override
-    public List<Genre> findAllGenres() {
-        List<Genre> genresList = new ArrayList<>();
-            for (int i = 0; i < Genre.genres_names.length;i++) {
-                genresList.add(new Genre(i + 1, Genre.genres_names[i]));
-            }
-            return genresList;
-        }
-
-    @Override
-    public Genre findGenreById(int id) {
-        try {
-            return (findAllGenres().get(id - 1));
-        } catch (Exception e) {
-            throw new IncorrectIdException("Genre_ID");
-        }
-    }
-
-    @Override
-    public List<Mpa> findAllMpaRatings() {
-        List<Mpa> mpaRatingsList = new ArrayList<>();
-        for (int i = 0; i < Mpa.mpa_rating_names.length; i++) {
-            mpaRatingsList.add(new Mpa(i + 1, Mpa.mpa_rating_names[i]));
-        }
-        return mpaRatingsList;
-    }
-
-    @Override
-    public Mpa findMpaRatingById(int id) {
-        try {
-            return (findAllMpaRatings().get(id - 1));
-        } catch (Exception e) {
-            throw new IncorrectIdException("Mpa");
-        }
     }
 }

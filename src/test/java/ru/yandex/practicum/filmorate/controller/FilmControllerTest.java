@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.exception.ArgNotPositiveException;
 import ru.yandex.practicum.filmorate.exception.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.Film.FilmDbService;
@@ -34,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FilmControllerTest {
     private final JdbcTemplate jdbcTemplate;
-    private Validator validator;          //создаем валидатор параметров Film
+    private Validator validator;
 
     @BeforeEach
     public void setUp() {
@@ -88,7 +87,7 @@ public class FilmControllerTest {
         //when
         filmController.createFilm(film1);
         film1.setId(1);
-        String id = "1";
+        Long id = 1L;
         Film result = filmController.findFilmById(id);
         assertNotNull(result, "Фильма с таким id нет");
         // then
@@ -112,7 +111,7 @@ public class FilmControllerTest {
         //when
         filmController.createFilm(film1);
         film1.setId(1);
-        String id = "5";
+        Long id = 5L;
         final IncorrectIdException exception = assertThrows(
                 IncorrectIdException.class,
                 () -> {
@@ -290,13 +289,13 @@ public class FilmControllerTest {
         userController.createUser(user2);
         filmController.createFilm(film1);
         // then
-        filmController.addNewLike("1", "1");
-        filmController.addNewLike("1", "2");
+        filmController.addNewLike(1L, 1L);
+        filmController.addNewLike(1L, 2L);
         Set<Long> result = new HashSet<>();
         result.add(1L);
         result.add(2L);
-        assertNotNull(filmController.findFilmById("1").getLikes(), "Список лайков равен null");
-        assertIterableEquals(filmController.findFilmById("1").getLikes(), result, "Списки лайков не равны!");
+        assertNotNull(filmController.findFilmById(1L).getLikes(), "Список лайков равен null");
+        assertIterableEquals(filmController.findFilmById(1L).getLikes(), result, "Списки лайков не равны!");
     }
 
     @Test
@@ -321,10 +320,10 @@ public class FilmControllerTest {
         // then
         final IncorrectIdException exception1 = assertThrows(
                 IncorrectIdException.class,
-                () -> filmController.addNewLike("1", "3"));
+                () -> filmController.addNewLike(1L, 3L));
         final IncorrectIdException exception2 = assertThrows(
                 IncorrectIdException.class,
-                () -> filmController.addNewLike("2", "1"));
+                () -> filmController.addNewLike(2L, 1L));
     }
 
     @Test
@@ -347,13 +346,13 @@ public class FilmControllerTest {
         filmController.createFilm(film1);
         film1.setId(1);
         // then
-        filmController.addNewLike("1", "1");
-        filmController.addNewLike("1", "2");
-        filmController.deleteLike("1", "1");
+        filmController.addNewLike(1L, 1L);
+        filmController.addNewLike(1L, 2L);
+        filmController.deleteLike(1L, 1L);
         Set<Long> result = new HashSet<>();
         result.add(2L);
         assertNotNull(film1.getLikes(), "Список лайков равен null");
-        assertIterableEquals(filmController.findFilmById("1").getLikes(), result, "Списки лайков не равны!");
+        assertIterableEquals(filmController.findFilmById(1L).getLikes(), result, "Списки лайков не равны!");
     }
 
     @Test
@@ -375,15 +374,15 @@ public class FilmControllerTest {
         userController.createUser(user2);
         filmController.createFilm(film1);
         film1.setId(1);
-        filmController.addNewLike("1", "1");
-        filmController.addNewLike("1", "2");
+        filmController.addNewLike(1L, 1L);
+        filmController.addNewLike(1L, 2L);
         // then
         final IncorrectIdException exception1 = assertThrows(
                 IncorrectIdException.class,
-                () -> filmController.deleteLike("1", "3"));
+                () -> filmController.deleteLike(1L, 3L));
         final IncorrectIdException exception2 = assertThrows(
                 IncorrectIdException.class,
-                () -> filmController.addNewLike("2", "1"));
+                () -> filmController.addNewLike(2L, 1L));
     }
 
     @Test
@@ -410,14 +409,14 @@ public class FilmControllerTest {
         filmController.createFilm(film2);
         film1.setId(1);
         film1.setId(2);
-        filmController.addNewLike("1", "1");
-        filmController.addNewLike("2", "1");
-        filmController.addNewLike("2", "2");
+        filmController.addNewLike(1L, 1L);
+        filmController.addNewLike(2L, 1L);
+        filmController.addNewLike(2L, 2L);
         // then
         List<Film> result = new ArrayList<>();
         result.add(film2);
         result.add(film1);
-        String count = "2";
+        Integer count = 2;
         assertNotNull(filmController.findPopularFilms(count), "Список фильмов равен null");
         assertIterableEquals(filmController.findPopularFilms(count), result, "Списки фильмов не равны!");
     }
@@ -446,115 +445,14 @@ public class FilmControllerTest {
         filmController.createFilm(film2);
         film1.setId(1);
         film1.setId(2);
-        filmController.addNewLike("1", "1");
-        filmController.addNewLike("2", "1");
-        filmController.addNewLike("2", "2");
+        filmController.addNewLike(1L, 1L);
+        filmController.addNewLike(2L, 1L);
+        filmController.addNewLike(2L, 2L);
         // then
-        String count = "0";
+        Integer count = 0;
         final ArgNotPositiveException exception = assertThrows(
                 ArgNotPositiveException.class,
                 () -> filmController.findPopularFilms(count));
-    }
-
-    @Test
-    void shouldFindAllGenres() {
-        //given
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
-                new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        //when
-        filmController.findAllGenres();
-        List<Genre> result = new ArrayList<>();
-        result.add(new Genre(1, "Комедия"));
-        result.add(new Genre(2, "Драма"));
-        result.add(new Genre(3, "Мультфильм"));
-        result.add(new Genre(4, "Триллер"));
-        result.add(new Genre(5, "Документальный"));
-        result.add(new Genre(6, "Боевик"));
-        // then
-        assertNotNull(filmController.findAllGenres(), "Список жанров равен null");
-        assertEquals(filmController.findAllGenres(), result, "Списки жанров не равны!");
-        assertIterableEquals(filmController.findAllGenres(), result, "Списки жанров не равны!");
-    }
-
-    @Test
-    void shouldFindGenreById() {
-        //given
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
-                new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        //when
-        String id = "4";
-        filmController.findGenreById(id);
-        Genre result = new Genre(4, "Триллер");
-        // then
-        assertNotNull(filmController.findGenreById(id), "Жанр равен null");
-        assertEquals(filmController.findGenreById(id), result, "Жанры не равны!");
-    }
-
-    @Test
-    void shouldNotFindGenreByIdIfIdIsIncorrect() {
-        //given
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
-                new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        //when
-        String i = "0";
-        String k = "8";
-        // then
-        final IncorrectIdException exception1 = assertThrows(
-                IncorrectIdException.class,
-                () -> filmController.findGenreById(i), "Найден жанр!");
-        final IncorrectIdException exception2 = assertThrows(
-                IncorrectIdException.class,
-                () -> filmController.findGenreById(k), "Найден жанр!");
-    }
-
-    @Test
-    void shouldFindAllMpaRatings() {
-        //given
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
-                new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        //when
-        filmController.findAllMpaRatings();
-        List<Mpa> result = new ArrayList<>();
-        result.add(new Mpa(1, "G"));
-        result.add(new Mpa(2, "PG"));
-        result.add(new Mpa(3, "PG-13"));
-        result.add(new Mpa(4, "R"));
-        result.add(new Mpa(5, "NC-17"));
-        // then
-        assertNotNull(filmController.findAllMpaRatings(), "Список MPA равен null");
-        assertEquals(filmController.findAllMpaRatings(), result, "Списки MPA не равны!");
-        assertIterableEquals(filmController.findAllMpaRatings(), result, "Списки MPA не равны!");
-    }
-
-    @Test
-    void shouldFindMpaById() {
-        //given
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
-                new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        //when
-        String id = "2";
-        filmController.findMpaRatingById(id);
-        Mpa result = new Mpa(2, "PG");
-        // then
-        assertNotNull(filmController.findMpaRatingById(id), "Mpa равен null");
-        assertEquals(filmController.findMpaRatingById(id), result, "Mpa не равны!");
-    }
-
-    @Test
-    void shouldNotFindMpaByIdIfIdIsIncorrect() {
-        //given
-        FilmController filmController = new FilmController(new FilmDbService(new FilmDbStorage(jdbcTemplate),
-                new UserDbStorage(jdbcTemplate), jdbcTemplate));
-        //when
-        String i = "0";
-        String k = "8";
-        // then
-        final IncorrectIdException exception1 = assertThrows(
-                IncorrectIdException.class,
-                () -> filmController.findMpaRatingById(i), "Найден MPA!");
-        final IncorrectIdException exception2 = assertThrows(
-                IncorrectIdException.class,
-                () -> filmController.findMpaRatingById(k), "Найден MPA!");
     }
 }
 

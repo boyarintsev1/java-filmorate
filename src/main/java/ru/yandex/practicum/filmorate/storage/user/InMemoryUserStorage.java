@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,25 +25,37 @@ public class InMemoryUserStorage implements UserStorage {
     final Map<Long, User> users = new HashMap<>();
     long id = 0;
 
+    /**
+     * метод получения данных о всех пользователях в виде HashMap
+     */
     @Override
     public Map<Long, User> getUsers() {
         return users;
     }
 
+    /**
+     * метод получения списка всех пользователей
+     */
     public List<User> findAllUsers() {                      // получение всех пользователей
-        return (List<User>) users.values();
+        return new ArrayList<>(users.values());
     }
 
+    /**
+     * метод получения данных о пользователе по его ID
+     */
     @Override
-    public User findUserById(long id) {                            // получение пользователя по ID
+    public User findUserById(long id) {
         if (!users.containsKey(id)) {
             throw new IncorrectIdException("UserID");
         }
         return users.get(id);
     }
 
+    /**
+     * метод создания нового пользователя
+     */
     @Override
-    public User createUser(@Valid @RequestBody User user) {            //создание нового пользователя
+    public User createUser(@Valid @RequestBody User user) {
         if (users.containsValue(user)) {
             throw new IdExistsException("userIdExists");
         }
@@ -59,8 +72,11 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
+    /**
+     * метод обновления данных о пользователе
+     */
     @Override
-    public User updateUser(@Valid @RequestBody User user) {                //обновление данных пользователя
+    public User updateUser(@Valid @RequestBody User user) {
         if (!users.containsKey(user.getId())) {
             throw new IncorrectIdException("userNotExists");
         } else {
@@ -76,7 +92,10 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    public boolean containsSpace(String input) {    //метод определения наличия пробелов в поле класса
+    /**
+     * метод определения наличия пробелов в поле класса
+     */
+    public boolean containsSpace(String input) {
         if (!input.isEmpty()) {
             for (int i = 0; i < input.length(); i++) {
                 if (Character.isWhitespace(input.charAt(i)) || Character.isSpaceChar(input.charAt(i))) {

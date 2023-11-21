@@ -35,28 +35,43 @@ public class UserDbService implements UserService {
         return null;
     }
 
+    /**
+     * метод получения списка всех пользователей
+     */
     @Override
-    public List<User> findAllUsers() {              // получение всех пользователей
+    public List<User> findAllUsers() {
         return userStorage.findAllUsers();
     }
 
+    /**
+     * метод получения данных о пользователе по его ID
+     */
     @Override
-    public User findUserById(Long id) {                  // получение пользователя по Id
+    public User findUserById(Long id) {
         return userStorage.findUserById(id);
     }
 
+    /**
+     * метод создания нового пользователя
+     */
     @Override
-    public User createUser(User user) {                 //создание нового пользователя
+    public User createUser(User user) {
         return userStorage.createUser(user);
     }
 
+    /**
+     * метод обновления данных о пользователе
+     */
     @Override
-    public User updateUser(User user) {                //обновление данных пользователя
+    public User updateUser(User user) {
         return userStorage.updateUser(user);
     }
 
+    /**
+     * метод добавления пользователя в список друзей
+     */
     @Override
-    public User addNewFriend(long id, long friendId) {                         //метод добавления нового друга
+    public User addNewFriend(long id, long friendId) {
         String s = "select count(*) from USERS where id = '" + id + "'";
         if ((jdbcTemplate.queryForObject(s, Integer.class) == 0) ||
                 (jdbcTemplate.queryForObject(s, Integer.class) == null)) {
@@ -80,8 +95,11 @@ public class UserDbService implements UserService {
         return findUserById(id);
     }
 
+    /**
+     * метод удаления пользователя из друзей
+     */
     @Override
-    public User deleteFriend(long id, long friendId) {                          //метод удаления друга из друзей
+    public User deleteFriend(long id, long friendId) {
         String s = "select count(*) from USERS where id = '" + id + "'";
         if ((jdbcTemplate.queryForObject(s, Integer.class) == 0) ||
                 (jdbcTemplate.queryForObject(s, Integer.class) == null)) {
@@ -106,8 +124,11 @@ public class UserDbService implements UserService {
         return findUserById(id);
     }
 
+    /**
+     * метод получения списка друзей указанного пользователя
+     */
     @Override
-    public Set<User> findUserFriends(Long id) {                               //метод поиска друзей пользователя
+    public Set<User> findUserFriends(Long id) {
         String s = "select count(*) from USERS where id = '" + id + "'";
         if ((jdbcTemplate.queryForObject(s, Integer.class) == 0) ||
                 (jdbcTemplate.queryForObject(s, Integer.class) == null)) {
@@ -122,8 +143,11 @@ public class UserDbService implements UserService {
         return setOfFriends;
     }
 
+    /**
+     * метод получения списка общих друзей двух пользователей
+     */
     @Override
-    public Set<User> findCommonFriends(long id, long otherId) {           //метод поиска общих друзей двух пользователей
+    public Set<User> findCommonFriends(long id, long otherId) {
         String s = "select count(*) from USERS where id = '" + id + "'";
         if ((jdbcTemplate.queryForObject(s, Integer.class) == 0) ||
                 (jdbcTemplate.queryForObject(s, Integer.class) == null)) {

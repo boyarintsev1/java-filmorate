@@ -23,27 +23,48 @@ public class InMemoryUserService implements UserService {
         this.userStorage = userStorage;
     }
 
+    @Override
     public Map<Long, User> getUsers() {
         return userStorage.getUsers();
     }
 
-    public List<User> findAllUsers() {              // получение всех пользователей
+    /**
+     * метод получения списка всех пользователей
+     */
+    @Override
+    public List<User> findAllUsers() {
         return userStorage.findAllUsers();
     }
 
-    public User findUserById(Long id) {                  // получение пользователя по Id
+    /**
+     * метод получения данных о пользователе по его ID
+     */
+    @Override
+    public User findUserById(Long id) {
         return userStorage.findUserById(id);
     }
 
-    public User createUser(User user) {                 //создание нового пользователя
+    /**
+     * метод создания нового пользователя
+     */
+    @Override
+    public User createUser(User user) {
         return userStorage.createUser(user);
     }
 
-    public User updateUser(User user) {                //обновление данных пользователя
+    /**
+     * метод обновления данных о пользователе
+     */
+    @Override
+    public User updateUser(User user) {
         return userStorage.updateUser(user);
     }
 
-    public User addNewFriend(long id, long friendId) {                         //метод добавления нового друга
+    /**
+     * метод добавления пользователя в список друзей
+     */
+    @Override
+    public User addNewFriend(long id, long friendId) {
         if (!userStorage.getUsers().containsKey(id)) {
             throw new IncorrectIdException("UserID");
         }
@@ -56,7 +77,11 @@ public class InMemoryUserService implements UserService {
         return userStorage.getUsers().get(id);
     }
 
-    public User deleteFriend(long id, long friendId) {                          //метод удаления друга из друзей
+    /**
+     * метод удаления пользователя из друзей
+     */
+    @Override
+    public User deleteFriend(long id, long friendId) {
         if (!userStorage.getUsers().containsKey(id)) {
             throw new IncorrectIdException("UserID");
         }
@@ -69,7 +94,11 @@ public class InMemoryUserService implements UserService {
         return userStorage.getUsers().get(id);
     }
 
-    public Set<User> findUserFriends(Long id) {                               //метод поиска друзей пользователя
+    /**
+     * метод получения списка друзей указанного пользователя
+     */
+    @Override
+    public Set<User> findUserFriends(Long id) {
         if (!userStorage.getUsers().containsKey(id)) {
             throw new IncorrectIdException("UserID");
         }
@@ -82,7 +111,11 @@ public class InMemoryUserService implements UserService {
         return setOfFriends;
     }
 
-    public Set<User> findCommonFriends(long id, long otherId) {           //метод поиска общих друзей двух пользователей
+    /**
+     * метод получения списка общих друзей двух пользователей
+     */
+    @Override
+    public Set<User> findCommonFriends(long id, long otherId) {
         if (!userStorage.getUsers().containsKey(id)) {
             throw new IncorrectIdException("UserID");
         }
