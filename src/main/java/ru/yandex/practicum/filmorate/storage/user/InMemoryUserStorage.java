@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exception.IdExistsException;
@@ -9,34 +10,52 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * класс хранения и обработки данных о пользователях User в памяти
+ */
 @Component
+@Qualifier("inMemoryUserStorage")
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
-    final Map<Integer, User> users = new HashMap<>();
-    int id = 0;
+    final Map<Long, User> users = new HashMap<>();
+    long id = 0;
 
-    public Map<Integer, User> getUsers() {
+    /**
+     * метод получения данных о всех пользователях в виде HashMap
+     */
+    @Override
+    public Map<Long, User> getUsers() {
         return users;
     }
 
-    public Collection<User> findAllUsers() {                      // получение всех пользователей
-        return users.values();
+    /**
+     * метод получения списка всех пользователей
+     */
+    public List<User> findAllUsers() {                      // получение всех пользователей
+        return new ArrayList<>(users.values());
     }
 
+    /**
+     * метод получения данных о пользователе по его ID
+     */
     @Override
-    public User findUserById(int id) {                            // получение пользователя по ID
+    public User findUserById(long id) {
         if (!users.containsKey(id)) {
             throw new IncorrectIdException("UserID");
         }
         return users.get(id);
     }
 
+    /**
+     * метод создания нового пользователя
+     */
     @Override
-    public User createUser(@Valid @RequestBody User user) {            //создание нового пользователя
+    public User createUser(@Valid @RequestBody User user) {
         if (users.containsValue(user)) {
             throw new IdExistsException("userIdExists");
         }
@@ -53,8 +72,11 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
+    /**
+     * метод обновления данных о пользователе
+     */
     @Override
-    public User updateUser(@Valid @RequestBody User user) {                //обновление данных пользователя
+    public User updateUser(@Valid @RequestBody User user) {
         if (!users.containsKey(user.getId())) {
             throw new IncorrectIdException("userNotExists");
         } else {
@@ -70,7 +92,10 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    public boolean containsSpace(String input) {    //метод определения наличия пробелов в поле класса
+    /**
+     * метод определения наличия пробелов в поле класса
+     */
+    public boolean containsSpace(String input) {
         if (!input.isEmpty()) {
             for (int i = 0; i < input.length(); i++) {
                 if (Character.isWhitespace(input.charAt(i)) || Character.isSpaceChar(input.charAt(i))) {

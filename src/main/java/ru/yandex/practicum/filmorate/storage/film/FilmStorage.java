@@ -3,14 +3,34 @@ package ru.yandex.practicum.filmorate.storage.film;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
+import java.util.Map;
 
+/**
+ * интерфейс хранения данных о Film
+ */
 public interface FilmStorage {
+    /**
+     * метод получения данных о всех фильмах в виде HashMap
+     */
+    Map<Long, Film> getFilms();
 
-    Collection<Film> findAllFilms();                  // получение всех фильмов
+    /**
+     * метод получения данных о всех фильмах
+     */
+    Collection<Film> findAllFilms();
 
-    Film findFilmById(int id);                       // получение фильма по ID
+    /**
+     * метод получения данных о фильме по его ID
+     */
+    Film findFilmById(long id);
 
-    Film createFilm(Film film);                     //создание нового фильма
+    /**
+     * метод создания нового фильма
+     */
+    Film createFilm(Film film);
 
-    Film updateFilm(Film film);                      //обновление данных о фильме
+    /**
+     * метод обновления данных о фильме
+     */
+    Film updateFilm(Film film);
 }

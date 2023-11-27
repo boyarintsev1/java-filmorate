@@ -2,9 +2,10 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.Film.FilmService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -13,7 +14,6 @@ import java.util.List;
 /**
  * класс - контроллер для управления данными о Film
  */
-
 @RestController
 @ResponseBody
 @Slf4j
@@ -22,7 +22,7 @@ public class FilmController {
     private final FilmService filmService;
 
     @Autowired
-    public FilmController(FilmService filmService) {
+    public FilmController(@Qualifier(value = "filmDbService") FilmService filmService) {
         this.filmService = filmService;
     }
 
@@ -38,8 +38,8 @@ public class FilmController {
      * метод получения данных о фильме по его ID
      */
     @GetMapping("/{id}")
-    public Film findFilmById(@PathVariable("id") String id) {
-        return filmService.findFilmById(Integer.parseInt(id));
+    public Film findFilmById(@PathVariable("id") Long id) {
+        return filmService.findFilmById(id);
     }
 
     /**
@@ -62,24 +62,26 @@ public class FilmController {
      * метод добавления лайка пользователя к фильму
      */
     @PutMapping("/{id}/like/{userId}")
-    public Film addNewLike(@PathVariable("id") String id, @PathVariable("userId") String userId) {
-        return filmService.addNewLike(Integer.parseInt(id), Integer.parseInt(userId));
+    public Film addNewLike(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
+        return filmService.addNewLike(id, userId);
     }
 
     /**
      * метод удаления лайка пользователя из фильма
      */
     @DeleteMapping("/{id}/like/{userId}")
-    public Film deleteLike(@PathVariable("id") String id, @PathVariable("userId") String userId) {
-        return filmService.deleteLike(Integer.parseInt(id), Integer.parseInt(userId));
+    public Film deleteLike(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
+        return filmService.deleteLike(id, userId);
     }
 
     /**
      * метод получения списка самых популярных фильмов с наибольшим количеством лайков
      */
     @GetMapping("/popular")
-    public List<Film> findPopularFilms(@RequestParam(defaultValue = "10", required = false) String count) {
-        return filmService.findPopularFilms(Integer.parseInt(count));
+    public List<Film> findPopularFilms(@RequestParam(defaultValue = "10", required = false) Integer count) {
+        System.out.println("Начал искать популярные 1");
+        return filmService.findPopularFilms(count);
     }
 }
+
 
